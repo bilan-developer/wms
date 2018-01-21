@@ -30,8 +30,6 @@ class ProductController extends Controller
 
     public function getProduct(Request $request)
     {
-
-
         $product = Product::all()->where('id', '=', $request->id)->toArray();
         $result = ['product' => array_shift($product)];
         return json_encode($result);
