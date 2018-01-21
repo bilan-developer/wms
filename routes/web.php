@@ -16,7 +16,10 @@ Route::get('/', function () {
 });
 //
 Route::get('/post-list', 'PostController@home');
-Route::get('/get-products', 'ProductController@getProducts');
+//Route::get('/get-products', 'ProductController@getProducts');
+Route::get('/get-products', function () {
+   dd('test');
+});
 Route::get('/get-product/{id}', 'ProductController@getProduct')->where('id', '[0-9]+');
 
 Route::resource('/posts','PostController');
