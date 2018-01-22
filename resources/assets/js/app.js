@@ -11,6 +11,7 @@ window.VueAxios=require('vue-axios').default;
 window.Axios=require('axios').default;
 
 
+
 let AppLayout= require('./components/ofers/App.vue');
 
 // Шаблон вывода новосте
@@ -70,9 +71,17 @@ const router = new VueRouter({ mode: 'history', routes: routes});
 //     )
 // ).$mount('#app');
 
-const app = new Vue({
+// Vue.use((Vue) => {
+//     Vue.prototype.$http = window.axios
+// });
+
+new Vue({
     el: '#app'
 });
+
+// const app = new Vue({
+//     el: '#app'
+// });
 
 window.appVue = {
     numberGoods : 0,
