@@ -64332,6 +64332,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -64365,14 +64367,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         /**
          * Обновляем общую стоимость за товар
          */
-        updateTotalPrice: function updateTotalPrice(value) {
-            console.log(value);
-            console.log(Math.round(Number(this.total)));
-            console.log(Math.round(Number(this.number)));
-
+        updateTotalPrice: function updateTotalPrice() {
             if (Math.round(Number(this.number)) > Math.round(Number(this.total))) {
                 this.number = Math.round(Number(this.total));
-                this.number.$set(10);
             }
 
             this.totalPrice = Math.round(Number(this.number) * Number(this.product.price) * 100) / 100;
@@ -64404,7 +64401,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this = this;
 
             if (!this.flag) {
-                var uri = 'http://wms/get-product/' + this.id;
+                var uri = '/get-product/' + this.id;
                 Axios.get(uri).then(function (response) {
                     console.log(response.data.product);
                     _this.product = response.data.product;
@@ -64586,11 +64583,15 @@ var render = function() {
                                         [
                                           _c("v-text-field", {
                                             attrs: {
+                                              id: "test",
                                               type: "number",
                                               required: "",
                                               autofocus: ""
                                             },
-                                            on: { input: _vm.updateTotalPrice },
+                                            on: {
+                                              change: _vm.updateTotalPrice,
+                                              input: _vm.updateTotalPrice
+                                            },
                                             model: {
                                               value: _vm.number,
                                               callback: function($$v) {

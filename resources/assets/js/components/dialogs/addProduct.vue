@@ -45,7 +45,9 @@
                                     <v-flex xs6>
                                         <v-flex xs6>
                                             <v-text-field
+                                                    id="test"
                                                     v-model.number="number"
+                                                    v-on:change="updateTotalPrice"
                                                     v-on:input="updateTotalPrice"
                                                     type="number"
                                                     required
@@ -115,16 +117,9 @@
             /**
              * Обновляем общую стоимость за товар
              */
-            updateTotalPrice: function(value) {
-                console.log(value);
-                console.log(Math.round((Number(this.total))));
-                console.log(Math.round((Number(this.number))));
-
+            updateTotalPrice: function() {
                 if(Math.round(Number(this.number)) >  Math.round((Number(this.total)))){
                     this.number = Math.round((Number(this.total)));
-                    this.number.$set(10);
-
-
                 }
 
                 this.totalPrice = Math.round((Number(this.number) * Number(this.product.price)) * 100) / 100;
@@ -146,7 +141,6 @@
 
                 }) ;
 
-
                 this.closeDialog();
             },
 
@@ -155,7 +149,7 @@
              */
             getProduct: function() {
                 if(!this.flag){
-                    let uri = 'http://wms/get-product/'+this.id;
+                    let uri = '/get-product/'+this.id;
                     Axios.get(uri).then((response) => {
                         console.log(response.data.product);
                         this.product = response.data.product;
