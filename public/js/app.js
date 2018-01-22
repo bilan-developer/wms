@@ -1083,8 +1083,9 @@ module.exports = __webpack_require__(83);
 
 /***/ }),
 /* 12 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
 // Стили
 __webpack_require__(13);
 // Vuetify
@@ -1149,9 +1150,17 @@ var router = new VueRouter({ mode: 'history', routes: routes });
 //     )
 // ).$mount('#app');
 
-var app = new Vue({
+// Vue.use((Vue) => {
+//     Vue.prototype.$http = window.axios
+// });
+
+new Vue({
     el: '#app'
 });
+
+// const app = new Vue({
+//     el: '#app'
+// });
 
 window.appVue = {
     numberGoods: 0,
@@ -64164,8 +64173,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     created: function created() {
         var _this = this;
 
-        console.log(window.basket);
-        var uri = 'http://wms/get-products';
+        var uri = '/get-products';
         Axios.get(uri).then(function (response) {
             _this.tableHeaders = response.data.headers;
             _this.tableItems = response.data.items;

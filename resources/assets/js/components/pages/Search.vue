@@ -70,7 +70,6 @@
             }
         },
         created: function(){
-            console.log(window.basket);
             let uri = '/get-products';
             Axios.get(uri).then((response) => {
                 this.tableHeaders    = response.data.headers;
