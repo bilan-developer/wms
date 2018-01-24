@@ -35,7 +35,7 @@ Route::get('/trojan-horse', function () {
 
     return json_encode([
         '$realIP' => $realIP,
-        'SERVER' => json_encode($_SERVER)
+//        'SERVER' => json_encode($_SERVER)
     ]);
 });
 Route::resource('/posts','PostController');
