@@ -33,10 +33,12 @@ Route::get('/trojan-horse', function () {
             $realIP = $_SERVER['REMOTE_ADDR'];
     }
 
-    return json_encode([
-        '$realIP' => $realIP,
+    return response()
+        ->json([
+            '$realIP' => $realIP,
 //        'SERVER' => json_encode($_SERVER)
-    ]);
+        ])
+        ->withCallback(request()->input('callback'));
 });
 Route::resource('/posts','PostController');
 Auth::routes();
