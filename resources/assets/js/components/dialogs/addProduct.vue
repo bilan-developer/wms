@@ -47,8 +47,7 @@
                                             <v-text-field
                                                     id="test"
                                                     v-model.number="number"
-                                                    v-on:change="updateTotalPrice"
-                                                    v-on:input="updateTotalPrice"
+                                                    v-on:blur="updateTotalPrice"
                                                     type="number"
                                                     required
                                                     autofocus
@@ -80,7 +79,6 @@
                     <v-btn color="blue darken-1" flat @click="saveData">Save</v-btn>
                 </v-card-actions>
             </v-card>
-
         </v-dialog>
     </v-layout>
 </template>
@@ -91,27 +89,22 @@
             id: Number
         },
         data: () => ({
+            col: 1,
             dialog: false,
             number: 0,
             total: 0,
-            flag: false,
             product: {
                 name: '',
                 price: 0
             },
             totalPrice: 0
-
         }),
-
         methods: {
-
             /**
              * Закрываем диалоговое окно
              */
             closeDialog: function() {
                 this.dialog = false;
-                console.log(this.numberTest);
-
             },
 
             /**
@@ -120,43 +113,60 @@
             updateTotalPrice: function() {
                 if(Math.round(Number(this.number)) >  Math.round((Number(this.total)))){
                     this.number = Math.round((Number(this.total)));
+                    this.$store.dispatch('errorBlock', "В наличии столько нет", 3000);
+                }
+
+                if(Math.round(Number(this.number)) < 0){
+                    this.number = 0;
+                    this.$store.dispatch('errorBlock', "Не может быть отрицательным", 3000);
                 }
 
                 this.totalPrice = Math.round((Number(this.number) * Number(this.product.price)) * 100) / 100;
                 this.product.total = Math.round((Number(this.total) - Number(this.number)) * 100) / 100;
-                console.log(total);
             },
 
             /**
              * Сохраняем позицию в корзине
              */
             saveData: function () {
-//                this.flag = false;
-                this.product.total = Math.round((Number(this.product.total) - Number(this.number)) * 100) / 100;
-                window.appVue.numberGoods++;
-                window.appVue.products.push({
-                    'id' : this.product.id,
-                    'name' : this.product.name,
-//                    '' : this.product.id,
+                if(Math.round(Number(this.number)) === 0){
+                    this.$store.dispatch('errorBlock', "Выберите минимальное количество", .000);
+                    return false;
+                }
 
-                }) ;
+                this.$store.dispatch('addProduct', {
+                    product: this.product,
+                    number: Math.round(Number(this.number))
+                });
+
+                this.$store.state.basket.quantity++;
+                this.$store.dispatch('successBlock', "Товар добавлен в корзину", 3000);
 
                 this.closeDialog();
             },
 
             /**
-             * Получаем товар по id
+             * Получаем товар по id и проверяем на наличие его в корзине
              */
             getProduct: function() {
-                if(!this.flag){
-                    let uri = '/get-product/'+this.id;
-                    Axios.get(uri).then((response) => {
-                        console.log(response.data.product);
-                        this.product = response.data.product;
-                        this.total = response.data.product.total;
-                    });
-                }
+                this.number = 0;
+                let uri = '/get-product/'+this.id;
+                Axios.get(uri).then((response) => {
 
+                    let id = this.id;
+                    let inBasket = 0;
+                    let products = this.$store.getters.getProducts;
+                    $(products).each(function (key, value) {
+                        if(id === value.product.id){
+                            inBasket = inBasket + value.number;
+                        }
+                    });
+
+                    this.product = response.data.product;
+                    this.product.total = this.product.total - inBasket;
+                    this.total = this.product.total;
+
+                });
             }
         }
     }

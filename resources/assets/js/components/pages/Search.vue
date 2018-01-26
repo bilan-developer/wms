@@ -2,13 +2,7 @@
     <div>
         <v-card-title>
             <div>
-                <v-btn color="error" @click="resetBasket">Сбросить</v-btn>
-            </div>
-            <div class="basket" @click="">
-                <v-badge left>
-                    <span slot="badge">{{ number }}</span>
-                    <v-icon large color="grey lighten-1">shopping_cart</v-icon>
-                </v-badge>
+                <basket></basket>
             </div>
             <v-spacer></v-spacer>
             <v-text-field
@@ -44,24 +38,22 @@
         <div class="text-xs-center pt-2">
             <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
         </div>
-        <div>
-        </div>
     </div>
-
 </template>
 
 <script>
     import addProduct from '../dialogs/addProduct.vue';
+    import basket from '../dialogs/Basket.vue';
 
     export default {
 
         components: {
-            addProduct
+            addProduct,
+            basket
         },
 
         data () {
             return {
-                number: 0,
                 search: '',
                 noResultsText: 'Такого товара нет',
                 pagination: {rowsPerPage: 10, page: 1},
@@ -83,21 +75,12 @@
             }
         },
         methods: {
-            resetBasket: function() {
-                this.number = 0;
 
-            },
-            removeFromList: function () {
-            }
         }
     }
 </script>
 <style>
     .pagination__more{
         display: none;
-    }
-    .basket{
-        margin-left: 25px;
-        cursor: pointer;
     }
 </style>

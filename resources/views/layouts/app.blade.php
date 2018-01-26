@@ -39,9 +39,6 @@
             @else
                 <layout></layout>
             @endguest
-
-    <!--        --><?php //dd(Auth::user()->name); ?>
-
         </div>
 
         <!-- Scripts -->

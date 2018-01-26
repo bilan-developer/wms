@@ -12,8 +12,8 @@ class ProductController extends Controller
     {
         $headers = [
 
-            [ 'text' => 'Марка',    'value' => 'tm',    'align' => 'left'],
             [ 'text' => 'Название', 'value' => 'name',  'align' => 'left'],
+            [ 'text' => 'Марка',    'value' => 'tm',    'align' => 'left'],
             [ 'text' => 'Ед.',      'value' => 'units', 'align' => 'center'],
             [ 'text' => 'В наличии.', 'value' => 'total',   'align' => 'center'],
             [ 'text' => 'Необходимо.' ,'value' => 'all',    'align' => 'center'],

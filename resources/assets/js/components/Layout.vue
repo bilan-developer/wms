@@ -1,5 +1,6 @@
 <template>
     <v-app id="inspire">
+        <toasts></toasts>
         <v-navigation-drawer
                 fixed
                 clipped
@@ -96,24 +97,27 @@
             <search  v-if="toggle === 'search'"></search>
             <stock   v-if="toggle === 'stock'"></stock>
             <report  v-if="toggle === 'report'"></report>
-
         </v-content>
     </v-app>
 </template>
 
 <script>
-    import Search from './pages/Search';
-    import Stock from './pages/Stock';
-    import Report from './pages/Report';
+    import search from './pages/Search';
+    import stock  from './pages/Stock';
+    import report from './pages/Report';
+    import toasts from './dialogs/Toasts.vue';
+
+
 
     export default {
         props: {
             source: String,
         },
         components: {
-            Search,
-            Stock,
-            Report
+            search,
+            stock,
+            report,
+            toasts
         },
         data: () => ({
             name: "Пользователь",
