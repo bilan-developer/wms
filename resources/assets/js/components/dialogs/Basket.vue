@@ -72,6 +72,14 @@
         }),
         methods: {
             /**
+             * Функция округления числа
+             */
+            modRound: function(value, precision){
+                let precision_number = Math.pow(10, precision);
+                return Math.round(value * precision_number) / precision_number;
+            },
+
+            /**
              * Сохраняем позицию в корзине
              */
             pay: function () {
@@ -133,6 +141,7 @@
                 let products = this.$store.getters.getProducts;
                 let item = [];
                 let amount = 0;
+                let modRound = this.modRound;
                 $(products).each(function (key, value) {
                     item.push(
                         {
@@ -141,14 +150,14 @@
                             units: value.product.units,
                             number: value.number,
                             price: value.product.price,
-                            amount: Math.round(Number(value.number) * Math.round(Number(value.product.price)))
+                            amount: modRound(value.number * value.product.price, 2)
                         }
                     );
-                    amount = amount + Math.round(Number(value.number) * Math.round(Number(value.product.price)));
+                    amount = amount + modRound(value.number * value.product.price, 2);
                 });
 
                 this.items = item;
-                this.amount = amount;
+                this.amount = this.modRound(amount, 2);
                 this.btnPay = !amount;
 
             }

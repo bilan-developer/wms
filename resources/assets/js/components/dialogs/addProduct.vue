@@ -111,27 +111,27 @@
              * Обновляем общую стоимость за товар
              */
             updateTotalPrice: function() {
-                if(Math.round(Number(this.number)) >  Math.round((Number(this.total)))){
-                    this.number = Math.round((Number(this.total)));
+                if(this.modRound(this.number, 2)  >  this.modRound(this.total, 2)){
+                    this.number = this.modRound(this.number, 2);
                     this.$store.dispatch('errorBlock', {text:"В наличии столько нет", time:1000});
 
                 }
 
-                if(Math.round(Number(this.number)) < 0){
+                if(this.modRound(this.number, 2) < 0){
                     this.number = 0;
                     this.$store.dispatch('errorBlock', {text:"Не может быть отрицательным", time:1000});
 
                 }
 
-                this.totalPrice = Math.round((Number(this.number) * Number(this.product.price)) * 100) / 100;
-                this.product.total = Math.round((Number(this.total) - Number(this.number)) * 100) / 100;
+                this.totalPrice = this.modRound(this.number * this.product.price, 2);
+                this.product.total = this.modRound(this.total - this.number, 2);
             },
 
             /**
              * Сохраняем позицию в корзине
              */
             saveData: function () {
-                if(Math.round(Number(this.number)) === 0){
+                if(this.modRound(this.number, 2) === 0){
                     this.$store.dispatch('errorBlock', {text:"Выберите минимальное количество", time:1000});
 
                     return false;
@@ -139,7 +139,7 @@
 
                 this.$store.dispatch('addProduct', {
                     product: this.product,
-                    number: Math.round(Number(this.number))
+                    number: this.modRound(this.number, 2)
                 });
 
                 this.$store.state.basket.quantity++;
@@ -171,6 +171,14 @@
                     this.total = this.product.total;
 
                 });
+            },
+
+            /**
+             * Функция округления числа
+             */
+             modRound: function(value, precision){
+                let precision_number = Math.pow(10, precision);
+                return Math.round(value * precision_number) / precision_number;
             }
         }
     }

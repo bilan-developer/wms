@@ -64376,25 +64376,25 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * Обновляем общую стоимость за товар
          */
         updateTotalPrice: function updateTotalPrice() {
-            if (Math.round(Number(this.number)) > Math.round(Number(this.total))) {
-                this.number = Math.round(Number(this.total));
+            if (this.modRound(this.number, 2) > this.modRound(this.total, 2)) {
+                this.number = this.modRound(this.number, 2);
                 this.$store.dispatch('errorBlock', { text: "В наличии столько нет", time: 1000 });
             }
 
-            if (Math.round(Number(this.number)) < 0) {
+            if (this.modRound(this.number, 2) < 0) {
                 this.number = 0;
                 this.$store.dispatch('errorBlock', { text: "Не может быть отрицательным", time: 1000 });
             }
 
-            this.totalPrice = Math.round(Number(this.number) * Number(this.product.price) * 100) / 100;
-            this.product.total = Math.round((Number(this.total) - Number(this.number)) * 100) / 100;
+            this.totalPrice = this.modRound(this.number * this.product.price, 2);
+            this.product.total = this.modRound(this.total - this.number, 2);
         },
 
         /**
          * Сохраняем позицию в корзине
          */
         saveData: function saveData() {
-            if (Math.round(Number(this.number)) === 0) {
+            if (this.modRound(this.number, 2) === 0) {
                 this.$store.dispatch('errorBlock', { text: "Выберите минимальное количество", time: 1000 });
 
                 return false;
@@ -64402,7 +64402,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             this.$store.dispatch('addProduct', {
                 product: this.product,
-                number: Math.round(Number(this.number))
+                number: this.modRound(this.number, 2)
             });
 
             this.$store.state.basket.quantity++;
@@ -64434,6 +64434,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.product.total = _this.product.total - inBasket;
                 _this.total = _this.product.total;
             });
+        },
+
+        /**
+         * Функция округления числа
+         */
+        modRound: function modRound(value, precision) {
+            var precision_number = Math.pow(10, precision);
+            return Math.round(value * precision_number) / precision_number;
         }
     }
 });
@@ -64899,6 +64907,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         /**
+         * Функция округления числа
+         */
+        modRound: function modRound(value, precision) {
+            var precision_number = Math.pow(10, precision);
+            return Math.round(value * precision_number) / precision_number;
+        },
+
+        /**
          * Сохраняем позицию в корзине
          */
         pay: function pay() {
@@ -64960,6 +64976,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var products = this.$store.getters.getProducts;
             var item = [];
             var amount = 0;
+            var modRound = this.modRound;
             $(products).each(function (key, value) {
                 item.push({
                     tm: value.product.tm,
@@ -64967,13 +64984,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     units: value.product.units,
                     number: value.number,
                     price: value.product.price,
-                    amount: Math.round(Number(value.number) * Math.round(Number(value.product.price)))
+                    amount: modRound(value.number * value.product.price, 2)
                 });
-                amount = amount + Math.round(Number(value.number) * Math.round(Number(value.product.price)));
+                amount = amount + modRound(value.number * value.product.price, 2);
             });
 
             this.items = item;
-            this.amount = amount;
+            this.amount = this.modRound(amount, 2);
             this.btnPay = !amount;
         }
     }
