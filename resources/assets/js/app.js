@@ -19,28 +19,28 @@ const toasts =  {
     state: {
         status:false,
         text: "",
-        time: 4000,
+        time: 1000,
         color: 'error'
     }
     ,
     actions: {
-        errorBlock({commit}, text, time) {
-            commit('ERROR_BLOCK', text, time)
+        errorBlock({commit}, data) {
+            commit('ERROR_BLOCK', data)
         },
-        successBlock({commit}, text, time) {
-            commit('SUCCESS_BLOCK', text, time)
+        successBlock({commit}, data) {
+            commit('SUCCESS_BLOCK',data)
         }
     },
     mutations: {
-        ERROR_BLOCK(state, text, time) {
-            state.time = time;
-            state.text = text;
+        ERROR_BLOCK(state, data) {
+            state.time = data.time;
+            state.text = data.text;
             state.color = 'error';
             state.status = true;
         },
-        SUCCESS_BLOCK(state, text, time) {
-            state.time = time;
-            state.text = text;
+        SUCCESS_BLOCK(state, data) {
+            state.time = data.time;
+            state.text = data.text;
             state.color = 'success';
             state.status = true;
         }
@@ -89,11 +89,38 @@ const basket =  {
         }
     }
 };
+const user =  {
+    state: {
+        user: {}
+    },
+    actions: {
+        initUser({commit}) {
+            commit('INIT_USER')
+        }
+    },
+    mutations: {
+        INIT_USER(state) {
+            // if(!Object.keys(state.user).length){
+                Axios.get('/get-user')
+                    .then((response) => {
+                        state.user = response;
+                    });
+            // }
+
+        }
+    },
+    getters: {
+        user(state){
+            return state.user
+        }
+    }
+};
 
 const store = new Vuex.Store({
     modules: {
         toasts: toasts,
-        basket: basket
+        basket: basket,
+        user  : user
     }
 });
 

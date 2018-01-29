@@ -75,8 +75,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="closeDialog">Close</v-btn>
-                    <v-btn color="blue darken-1" flat @click="saveData">Save</v-btn>
+                    <v-btn color="blue darken-1" flat @click="closeDialog">Закрыть</v-btn>
+                    <v-btn color="blue darken-1" flat @click="saveData">Добавить в корзину</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -113,12 +113,14 @@
             updateTotalPrice: function() {
                 if(Math.round(Number(this.number)) >  Math.round((Number(this.total)))){
                     this.number = Math.round((Number(this.total)));
-                    this.$store.dispatch('errorBlock', "В наличии столько нет", 3000);
+                    this.$store.dispatch('errorBlock', {text:"В наличии столько нет", time:1000});
+
                 }
 
                 if(Math.round(Number(this.number)) < 0){
                     this.number = 0;
-                    this.$store.dispatch('errorBlock', "Не может быть отрицательным", 3000);
+                    this.$store.dispatch('errorBlock', {text:"Не может быть отрицательным", time:1000});
+
                 }
 
                 this.totalPrice = Math.round((Number(this.number) * Number(this.product.price)) * 100) / 100;
@@ -130,7 +132,8 @@
              */
             saveData: function () {
                 if(Math.round(Number(this.number)) === 0){
-                    this.$store.dispatch('errorBlock', "Выберите минимальное количество", .000);
+                    this.$store.dispatch('errorBlock', {text:"Выберите минимальное количество", time:1000});
+
                     return false;
                 }
 
@@ -140,7 +143,8 @@
                 });
 
                 this.$store.state.basket.quantity++;
-                this.$store.dispatch('successBlock', "Товар добавлен в корзину", 3000);
+                this.$store.dispatch('successBlock', {text:"Товар добавлен в корзину", time:1000});
+
 
                 this.closeDialog();
             },

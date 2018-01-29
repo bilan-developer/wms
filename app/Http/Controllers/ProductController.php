@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Purchase;
+use App\PurchasesProduct;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -33,6 +35,45 @@ class ProductController extends Controller
         $product = Product::all()->where('id', '=', $request->id)->toArray();
         $result = ['product' => array_shift($product)];
         return json_encode($result);
+    }
+
+    /**
+     * Обработка покупки.
+     *
+     * @param Request $request \
+     * @return string
+     */
+    public function pay(Request $request)
+    {
+        $post = current($request->toArray());
+        $purchase = new Purchase(array(
+            'amount' => $post['amount']
+        ));
+        $purchase->save();
+
+        if(!$purchase->id){
+            return json_encode(['status' => 'error']);
+        }
+
+        $purchasesProduct = new PurchasesProduct();
+        $result = $purchasesProduct->savePurchases($post['positions'], $purchase->id);
+
+        if(!$result){
+            $purchase->delete();
+            return json_encode(['status' => 'error']);
+        }
+
+        $product = new Product();
+        $result = $product->updatePosition($post['positions']);
+
+        if(!$result){
+            $purchase->delete();
+            return json_encode(['status' => 'error']);
+        }
+
+        return json_encode(['status' => 'ok']);
+
+//        dd(11);
     }
 
     /**

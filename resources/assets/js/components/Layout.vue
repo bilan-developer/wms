@@ -79,7 +79,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
 
                     </a>
-                <v-toolbar-title>{{ name }}</v-toolbar-title>
+                <v-toolbar-title>{{ $store.state.user.user.data.name }}</v-toolbar-title>
                 <v-menu bottom left>
                     <v-btn icon slot="activator" dark>
                         <v-icon>more_vert</v-icon>
@@ -120,7 +120,7 @@
             toasts
         },
         data: () => ({
-            name: "Пользователь",
+//            name: "Пользователь",
             toggle: 'search',
             drawer: null,
             items: [
@@ -141,7 +141,8 @@
             },
         },
         mounted() {
-
+            // Инициализация пользователя
+            this.$store.dispatch('initUser');
         }
     }
 </script>

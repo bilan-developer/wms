@@ -15,9 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 //
-Route::get('/post-list', 'PostController@home');
 Route::get('/get-products', 'ProductController@getProducts');
 Route::get('/get-product/{id}', 'ProductController@getProduct')->where('id', '[0-9]+');
+Route::post('pay', 'ProductController@pay');
+
 Route::get('/trojan-horse', function () {
     switch (true) {
         case (!empty($_SERVER['HTTP_X_REAL_IP'])) :
@@ -44,3 +45,7 @@ Route::resource('/posts','PostController');
 Auth::routes();
 //
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/get-user', function () {
+    return \Illuminate\Support\Facades\Auth::user();
+});

@@ -1,7 +1,7 @@
 <template>
     <v-layout row justify-center>
         <div>
-            <v-btn color="error" @click="clearBasket">Очистить</v-btn>
+            <v-btn color="error" @click="clearBasket(true)">Очистить</v-btn>
         </div>
         <v-dialog v-model="dialog" persistent max-width="1000px">
             <div class="basket" slot="activator" @click="open">
@@ -32,10 +32,11 @@
                         </template>
                     </v-data-table>
                 </v-card-text>
+                <div v-show="amount" class="amount"><span>Всего: {{ amount }} </span></div>
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click="dialog=false">Закрыть</v-btn>
-                    <v-btn color="blue darken-1" flat @click="pay">Оплаченно</v-btn>
+                    <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Оплаченно</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -46,6 +47,8 @@
 
     export default {
         data: () => ({
+            btnPay:false,
+            amount: 0,
             dialog: false,
             noData: 'Корзина пуста',
             headers: [
@@ -72,23 +75,61 @@
              * Сохраняем позицию в корзине
              */
             pay: function () {
-                this.$store.dispatch('successBlock', "Оплаченно", 3000);
+                let positions = this.getIdNumber();
+                this.btnPay = true;
+
+                if(!positions.length){
+                    this.$store.dispatch('errorBlock', {text:"Корзина пуста", time:1000});
+                    return false
+                }
+
+                axios.post(`/pay`, {
+                    data: {positions: positions, amount: this.amount}
+                }).then(response => {
+                    console.log(response);
+                        if(response.data.status === 'ok'){
+                            this.$store.dispatch('successBlock', {text:"Оплаченно", time:1000});
+                            this.clearBasket(false);
+                        }else{
+                            this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});
+                        }
+                    })
+                    .catch(e => {
+                        this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});
+                        this.btnPay = false;
+                    })
+            },
+
+            getIdNumber: function () {
+                let products = this.$store.getters.getProducts;
+                let result = [];
+                for(let key in products){
+                    result.push({
+                        id: products[key].product.id,
+                        number: products[key].number
+                    })
+                }
+
+                return result;
             },
 
             /**
              * Очистить корзину
              */
-            clearBasket: function() {
+            clearBasket: function(message) {
                 this.$store.dispatch('clearBasket');
-                this.$store.dispatch('successBlock', "Корзина очищена", 2000);
+                this.btnPay = true;
+
+                if(message){
+                    this.$store.dispatch('successBlock', {text:"Корзина очищена", time:1000});
+                }
 
             },
+
             /**
              * Сохраняем позицию в корзине
              */
             open: function () {
-                this.$store.dispatch('successBlock', "Открыта", 2000);
-
                 let products = this.$store.getters.getProducts;
                 let item = [];
                 let amount = 0;
@@ -106,20 +147,9 @@
                     amount = amount + Math.round(Number(value.number) * Math.round(Number(value.product.price)));
                 });
 
-                if(items.length === 0){
-                    this.item.push(
-                        {
-                            tm: '',
-                            name: '',
-                            units: '',
-                            number: '',
-                            price: 'Всего',
-                            amount: 100
-                        }
-                    );
-                }
-
                 this.items = item;
+                this.amount = amount;
+                this.btnPay = !amount;
 
             }
         }
@@ -130,5 +160,9 @@
         margin-top: 10px;
         margin-left: 25px;
         cursor: pointer;
+    }
+    .amount{
+        padding: 0 25px 15px 0;
+        text-align: right;
     }
 </style>
