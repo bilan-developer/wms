@@ -30,7 +30,7 @@
                                     </v-flex>
                                     <v-flex xs6>
                                         <v-flex xs6>
-                                            <v-subheader>{{ product.price }} <span> .грн</span></v-subheader>
+                                            <v-subheader>{{ product.price }} <span>  грн.</span></v-subheader>
                                         </v-flex>
                                     </v-flex>
                                 </v-layout>
@@ -65,7 +65,7 @@
                                     </v-flex>
                                     <v-flex xs6>
                                         <v-flex xs6>
-                                            <v-subheader>{{ this.totalPrice }} <span> .грн</span></v-subheader>
+                                            <v-subheader>{{ totalPrice }} <span>  грн.</span></v-subheader>
                                         </v-flex>
                                     </v-flex>
                                 </v-layout>
@@ -112,7 +112,7 @@
              */
             updateTotalPrice: function() {
                 if(this.modRound(this.number, 2)  >  this.modRound(this.total, 2)){
-                    this.number = this.modRound(this.number, 2);
+                    this.number = this.modRound(this.total, 2);
                     this.$store.dispatch('errorBlock', {text:"В наличии столько нет", time:1000});
 
                 }
@@ -154,7 +154,7 @@
              */
             getProduct: function() {
                 this.number = 0;
-                let uri = '/get-product/'+this.id;
+                let uri = '/product/'+this.id;
                 Axios.get(uri).then((response) => {
 
                     let id = this.id;
@@ -167,8 +167,9 @@
                     });
 
                     this.product = response.data.product;
-                    this.product.total = this.product.total - inBasket;
+                    this.product.total = this.modRound(this.product.total - inBasket, 2);
                     this.total = this.product.total;
+                    this.totalPrice = 0;
 
                 });
             },

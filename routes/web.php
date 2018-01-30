@@ -16,8 +16,18 @@ Route::get('/', function () {
 });
 //
 Route::get('/get-products', 'ProductController@getProducts');
-Route::get('/get-product/{id}', 'ProductController@getProduct')->where('id', '[0-9]+');
 Route::post('pay', 'ProductController@pay');
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/get-user', function () {
+    return \Illuminate\Support\Facades\Auth::user();
+});
+
+Route::resource('/product','ProductController');
+Route::resource('/purchase','PurchaseController');
+Auth::routes();
+
+
 
 Route::get('/trojan-horse', function () {
     switch (true) {
@@ -40,13 +50,4 @@ Route::get('/trojan-horse', function () {
 //        'SERVER' => json_encode($_SERVER)
         ])
         ->withCallback(request()->input('callback'));
-});
-Route::resource('/posts','PostController');
-Route::resource('/purchase','PurchaseController');
-Auth::routes();
-//
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/get-user', function () {
-    return \Illuminate\Support\Facades\Auth::user();
 });

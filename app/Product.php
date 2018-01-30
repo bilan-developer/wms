@@ -15,7 +15,7 @@ class Product extends Model
         'units',
         'total',
         'all',
-        'prise',
+        'price',
         'nds'
     ];
 

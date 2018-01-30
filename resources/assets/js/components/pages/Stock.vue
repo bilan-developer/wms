@@ -33,8 +33,11 @@
                 <td class="text-xs-center">{{ props.item.total }}</td>
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
-                <td class="text-xs-center">
+                <td class="btn-column text-xs-center">
                     <add-product :id="props.item.id" :type_btn='"edit"'></add-product>
+                </td>
+                <td class="btn-column text-xs-center">
+                    <v-btn color="red" v-on:click="deleteProduct(props.item.id)"> <i class="material-icons">close</i></v-btn>
                 </td>
             </template>
         </v-data-table>
@@ -76,12 +79,19 @@
             }
         },
         methods: {
-
+            deleteProduct:function (id) {
+                console.log(id);
+            }
         }
     }
 </script>
 <style>
     .pagination__more{
         display: none;
+    }
+    tr .btn-column{
+        width: 100px!important;
+        margin:0!important;
+        padding: 0!important;
     }
 </style>

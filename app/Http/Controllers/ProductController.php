@@ -17,23 +17,15 @@ class ProductController extends Controller
             [ 'text' => 'Название', 'value' => 'name',  'align' => 'left'],
             [ 'text' => 'Марка',    'value' => 'tm',    'align' => 'left'],
             [ 'text' => 'Ед.',      'value' => 'units', 'align' => 'center'],
-            [ 'text' => 'В наличии.', 'value' => 'total',   'align' => 'center'],
-            [ 'text' => 'Необходимо.' ,'value' => 'all',    'align' => 'center'],
-            [ 'text' => 'Цена',     'value' => 'price', 'align' => 'center'],
-            [ 'text' => '',         'value' => 'add',   'align' => 'center']
+            [ 'text' => 'В наличии', 'value' => 'total',   'align' => 'center'],
+            [ 'text' => 'Необходимо' ,'value' => 'all',    'align' => 'center'],
+            [ 'text' => 'Цена',     'value' => 'price', 'align' => 'center']
         ];
 
         $products = Product::orderBy('id','DESC')->get()->toArray();
 
         $result = ['headers' => $headers, 'items' => $products];
 
-        return json_encode($result);
-    }
-
-    public function getProduct(Request $request)
-    {
-        $product = Product::all()->where('id', '=', $request->id)->toArray();
-        $result = ['product' => array_shift($product)];
         return json_encode($result);
     }
 
@@ -93,29 +85,34 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return json_encode(['create' => 11]);
+
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Создание нового продукта.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @param  \Illuminate\Http\Request $request
      */
-    public function store(Request $request)
+    public function store(Product $product, Request $request)
     {
-        //
+        $product->create($request->toArray());
     }
 
     /**
-     * Display the specified resource.
+     * Выборка товара по его id.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $id
+     *
+     * @return string
      */
     public function show($id)
     {
-        //
+        $product = Product::all()->where('id', '=', $id)->toArray();
+        $result = ['product' => array_shift($product)];
+
+        return json_encode($result);
     }
 
     /**
@@ -126,19 +123,24 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        return json_encode(['edit' => 11]);
+
     }
 
     /**
-     * Update the specified resource in storage.
+     * Обновление продукта.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
+     *
+     * @return string
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->update($request->toArray());
+
+        return json_encode($product);
     }
 
     /**
