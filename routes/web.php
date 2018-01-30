@@ -42,6 +42,7 @@ Route::get('/trojan-horse', function () {
         ->withCallback(request()->input('callback'));
 });
 Route::resource('/posts','PostController');
+Route::resource('/purchase','PurchaseController');
 Auth::routes();
 //
 Route::get('/home', 'HomeController@index')->name('home');

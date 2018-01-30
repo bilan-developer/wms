@@ -97,6 +97,7 @@
             <search  v-if="toggle === 'search'"></search>
             <stock   v-if="toggle === 'stock'"></stock>
             <report  v-if="toggle === 'report'"></report>
+            <purchase  v-if="toggle === 'purchase'"></purchase>
         </v-content>
     </v-app>
 </template>
@@ -105,6 +106,7 @@
     import search from './pages/Search';
     import stock  from './pages/Stock';
     import report from './pages/Report';
+    import purchase from './pages/Purchase';
     import toasts from './dialogs/Toasts.vue';
 
 
@@ -117,16 +119,17 @@
             search,
             stock,
             report,
+            purchase,
             toasts
         },
         data: () => ({
-//            name: "Пользователь",
             toggle: 'search',
             drawer: null,
             items: [
                 { icon: 'search', text: 'Поиск', comp: 'search'},
                 { icon: 'home', text: 'Склад', comp: 'stock' },
                 { icon: 'content_copy', text: 'Отчёты', comp: 'report' },
+                { icon: 'shopping_basket', text: 'Покупки', comp: 'purchase' },
             ],
             rightMenu: [
                 { title : 'Настройки',  method: "" },

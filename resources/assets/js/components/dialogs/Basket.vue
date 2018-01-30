@@ -114,7 +114,8 @@
                 for(let key in products){
                     result.push({
                         id: products[key].product.id,
-                        number: products[key].number
+                        number: products[key].number,
+                        amount: this.modRound(products[key].number * products[key].product.price, 2)
                     })
                 }
 
@@ -135,7 +136,7 @@
             },
 
             /**
-             * Сохраняем позицию в корзине
+             * Открыть корзину
              */
             open: function () {
                 let products = this.$store.getters.getProducts;
