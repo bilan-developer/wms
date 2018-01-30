@@ -1,37 +1,41 @@
 <template>
-    <div>
-        <v-card-title>
-            <div>
-                <basket></basket>
-            </div>
-            <v-spacer></v-spacer>
-            <v-text-field
-                    append-icon="search"
-                    label="Поиск..."
-                    single-line
-                    hide-details
-                    v-model="search"
-            ></v-text-field>
-        </v-card-title>
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <v-card-title>
+                <div class="col-md-2">
+                    <basket></basket>
+                </div>
+                <div class="col-md-7 col-md-offset-3">
+                    <v-text-field
+                            append-icon="search"
+                            label="Поиск..."
+                            single-line
+                            hide-details
+                            v-model="search"
+                    ></v-text-field>
+                </div>
+            </v-card-title>
+        </div>
+
         <v-data-table
-            v-bind:headers="tableHeaders"
-            v-bind:items="tableItems"
-            v-bind:search="search"
-            v-bind:pagination.sync="pagination"
-            v-bind:no-results-text="noResultsText"
+            :headers="tableHeaders"
+            :items="tableItems"
+            :search="search"
+            :pagination.sync="pagination"
+            :no-results-text="noResultsText"
             hide-actions
             class="elevation-1"
         >
             <template slot="items" slot-scope="props">
 
-                <td class="text-xs-left">{{ props.item.tm }}</td>
                 <td class="text-xs-left">{{ props.item.name }}</td>
+                <td class="text-xs-left">{{ props.item.tm }}</td>
                 <td class="text-xs-center">{{ props.item.units }}</td>
                 <td class="text-xs-center">{{ props.item.total }}</td>
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="text-xs-center">
-                    <add-product :id="props.item.id"></add-product>
+                    <add-product-basket :id="props.item.id"></add-product-basket>
                 </td>
             </template>
         </v-data-table>
@@ -42,13 +46,13 @@
 </template>
 
 <script>
-    import addProduct from '../dialogs/addProduct.vue';
+    import addProductBasket from '../dialogs/addProductBasket.vue';
     import basket from '../dialogs/Basket.vue';
 
     export default {
 
         components: {
-            addProduct,
+            addProductBasket,
             basket
         },
 
@@ -57,8 +61,8 @@
                 search: '',
                 noResultsText: 'Такого товара нет',
                 pagination: {rowsPerPage: 10, page: 1},
-                tableHeaders: {},
-                tableItems: {}
+                tableHeaders: [],
+                tableItems: []
             }
         },
         created: function(){

@@ -1,9 +1,12 @@
 <template>
-    <div>
-        <div class="col-md-1 col-md-offset-10 sales-amount">
-            <v-chip color="green" block text-color="white">Продаж на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+    <div class="col-md-12">
+        <div class="col-md-12">
+            <v-card-title>
+                <div class="col-md-1 col-md-offset-10 sales-amount">
+                    <v-chip color="green" block text-color="white">Продаж на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                </div>
+            </v-card-title>
         </div>
-
         <v-data-table
                 v-bind:headers="tableHeaders"
                 v-bind:items="tableItems"
@@ -17,7 +20,7 @@
                 <td class="col-md-2 text-xs-left">{{ props.item.created_at }}</td>
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="col-md-2 text-xs-center">{{ props.item.amount }}</td>
-                <td class="text-xs-center">
+                <td class="col-md-1 text-xs-right">
                     <show-purchase :id="props.item.id"></show-purchase>
                 </td>
             </template>
@@ -40,8 +43,8 @@
                 salesAmount: 0,
                 noResultsText: 'Такого товара нет',
                 pagination: {rowsPerPage: 10, page: 1},
-                tableHeaders: {},
-                tableItems: {}
+                tableHeaders: [],
+                tableItems: []
             }
         },
         created: function(){

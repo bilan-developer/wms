@@ -9,11 +9,9 @@
                 </v-toolbar>
                 <v-card-text>
                     <v-data-table
-                            :headers="headers"
-                            :items="items"
+                            :headers="tableHeaders"
+                            :items="tableItems"
                             hide-actions
-                            item-key="name"
-                            :no-data-text="noData"
                     >
                         <template slot="items" slot-scope="props">
                             <td class="text-xs-left">{{ props.item.name }}</td>
@@ -44,24 +42,8 @@
         data: () => ({
             amount: 0,
             dialog: false,
-            headers: [
-                { text: 'Название',   align: 'left',   value: 'name', sortable: true },
-                { text: 'Марка',      align: 'left',   value: 'tm' },
-                { text: 'Ед.',        align: 'center', value: 'units' },
-                { text: 'Количество', align: 'center', value: 'number' },
-                { text: 'Цена',       align: 'center', value: 'price' },
-                { text: 'Cумма',      align: 'center', value: 'amount' },
-            ],
-            items: [
-                {
-                    tm: 'ELFINA',
-                    name: 'ВД для стен "NORMA" 10 кг',
-                    units: 'шт',
-                    number: 24,
-                    price: 45,
-                    amount: 87,
-                }
-            ]
+            tableHeaders: [],
+            tableItems: []
         }),
         methods: {
             /**
@@ -78,8 +60,8 @@
             show: function() {
                 let uri = '/purchase/' + this.id;
                 Axios.get(uri).then((response) => {
-                    this.headers = response.data.headers;
-                    this.items   = response.data.items;
+                    this.tableHeaders = response.data.headers;
+                    this.tableItems   = response.data.items;
                     this.amount  = response.data.salesAmount;
                     this.dialog  = true;
                 });

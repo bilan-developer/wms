@@ -80,7 +80,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true">
 
                     </a>
-                <v-toolbar-title>{{ $store.state.user.user.data.name }}</v-toolbar-title>
+                <v-toolbar-title>{{ $store.state.user.user.name }}</v-toolbar-title>
                 <v-menu bottom left>
                     <v-btn icon slot="activator" dark>
                         <v-icon>more_vert</v-icon>
@@ -152,3 +152,8 @@
         }
     }
 </script>
+<style>
+    html{
+        overflow-y:auto!important;
+    }
+</style>

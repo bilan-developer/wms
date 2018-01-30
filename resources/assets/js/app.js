@@ -91,7 +91,9 @@ const basket =  {
 };
 const user =  {
     state: {
-        user: {}
+        user: {
+            name: ''
+        }
     },
     actions: {
         initUser({commit}) {
@@ -100,12 +102,10 @@ const user =  {
     },
     mutations: {
         INIT_USER(state) {
-            // if(!Object.keys(state.user).length){
-                Axios.get('/get-user')
-                    .then((response) => {
-                        state.user = response;
-                    });
-            // }
+            Axios.get('/get-user')
+                .then((response) => {
+                    state.user = response.data;
+                });
 
         }
     },
