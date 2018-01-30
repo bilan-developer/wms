@@ -63851,6 +63851,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__pages_Purchase___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__pages_Purchase__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dialogs_Toasts_vue__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__dialogs_Toasts_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__dialogs_Toasts_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__apps_Progress_vue__ = __webpack_require__(96);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__apps_Progress_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__apps_Progress_vue__);
 //
 //
 //
@@ -63955,6 +63957,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -63971,7 +63975,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         stock: __WEBPACK_IMPORTED_MODULE_1__pages_Stock___default.a,
         report: __WEBPACK_IMPORTED_MODULE_2__pages_Report___default.a,
         purchase: __WEBPACK_IMPORTED_MODULE_3__pages_Purchase___default.a,
-        toasts: __WEBPACK_IMPORTED_MODULE_4__dialogs_Toasts_vue___default.a
+        toasts: __WEBPACK_IMPORTED_MODULE_4__dialogs_Toasts_vue___default.a,
+        progressCircular: __WEBPACK_IMPORTED_MODULE_5__apps_Progress_vue___default.a
     },
     data: function data() {
         return {
@@ -66393,6 +66398,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -66434,6 +66440,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.headers = response.data.headers;
                 _this.items = response.data.items;
                 _this.amount = response.data.salesAmount;
+                _this.dialog = true;
             });
         }
 
@@ -66453,6 +66460,12 @@ var render = function() {
     { attrs: { row: "", "justify-center": "" } },
     [
       _c(
+        "v-btn",
+        { attrs: { color: "primary", dark: "" }, on: { click: _vm.show } },
+        [_vm._v("Просмотреть")]
+      ),
+      _vm._v(" "),
+      _c(
         "v-dialog",
         {
           attrs: { persistent: "", "max-width": "1000px" },
@@ -66466,22 +66479,12 @@ var render = function() {
         },
         [
           _c(
-            "v-btn",
-            {
-              attrs: { slot: "activator", color: "primary", dark: "" },
-              on: { click: _vm.show },
-              slot: "activator"
-            },
-            [_vm._v("Просмотреть")]
-          ),
-          _vm._v(" "),
-          _c(
             "v-card",
             [
               _c(
                 "v-toolbar",
                 { attrs: { color: "indigo", dark: "" } },
-                [_c("v-toolbar-title", [_vm._v("Корзина")])],
+                [_c("v-toolbar-title", [_vm._v("Покупка")])],
                 1
               ),
               _vm._v(" "),
@@ -66616,6 +66619,130 @@ exports.push([module.i, "\n.amount{\n    padding: 0 25px 15px 0;\n    text-align
 
 // exports
 
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(98)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = null
+/* template */
+var __vue_template__ = __webpack_require__(100)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\apps\\Progress.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4f4141a0", Component.options)
+  } else {
+    hotAPI.reload("data-v-4f4141a0", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 97 */,
+/* 98 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(99);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(12)("5bc731dd", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4f4141a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Progress.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-4f4141a0\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Progress.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 99 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.substrate{\n    background: #d5d5d5;\n    width: 100%;\n    height: 100%;\n    position:absolute;\n    opacity: 0.7;\n    z-index: 999;\n}\n.progress_circular{\n    width:100px;\n    height:100px;\n    position:absolute;\n    left:50%;\n    top:50%;\n    margin:-150px 0 0 0;\n    z-index: 999999;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "substrate" }, [
+    _c(
+      "div",
+      { staticClass: "progress_circular" },
+      [
+        _c("v-progress-circular", {
+          attrs: { indeterminate: "", size: 100, width: 7, color: "purple" }
+        })
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4f4141a0", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

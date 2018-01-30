@@ -1,10 +1,11 @@
 <template>
     <v-layout row justify-center>
+        <v-btn color="primary" dark v-on:click="show">Просмотреть</v-btn>
         <v-dialog v-model="dialog" persistent max-width="1000px">
-            <v-btn color="primary" dark v-on:click="show" slot="activator">Просмотреть</v-btn>
+            <!--<v-btn color="primary" dark v-on:click="show" slot="activator">Просмотреть</v-btn>-->
             <v-card>
                 <v-toolbar color="indigo" dark>
-                    <v-toolbar-title>Корзина</v-toolbar-title>
+                    <v-toolbar-title>Покупка</v-toolbar-title>
                 </v-toolbar>
                 <v-card-text>
                     <v-data-table
@@ -77,9 +78,10 @@
             show: function() {
                 let uri = '/purchase/' + this.id;
                 Axios.get(uri).then((response) => {
-                    this.headers    = response.data.headers;
-                    this.items      = response.data.items;
-                    this.amount     = response.data.salesAmount;
+                    this.headers = response.data.headers;
+                    this.items   = response.data.items;
+                    this.amount  = response.data.salesAmount;
+                    this.dialog  = true;
                 });
             },
 

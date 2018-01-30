@@ -1,6 +1,7 @@
 <template>
     <v-app id="inspire">
         <toasts></toasts>
+        <!--<progress-circular></progress-circular>-->
         <v-navigation-drawer
                 fixed
                 clipped
@@ -108,6 +109,7 @@
     import report from './pages/Report';
     import purchase from './pages/Purchase';
     import toasts from './dialogs/Toasts.vue';
+    import progressCircular from './apps/Progress.vue';
 
 
 
@@ -120,7 +122,8 @@
             stock,
             report,
             purchase,
-            toasts
+            toasts,
+            progressCircular
         },
         data: () => ({
             toggle: 'search',
