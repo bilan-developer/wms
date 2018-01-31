@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <v-card-title>
                 <div class="col-md-2">
-                    <add-product :type_btn='"add"'></add-product>
+                    <add-product :type_btn='"add"' @updateTable="getProducts"></add-product>
                 </div>
                 <div class="col-md-7 col-md-offset-3">
                     <v-text-field
@@ -34,7 +34,7 @@
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="btn-column text-xs-center">
-                    <add-product :id="props.item.id" :type_btn='"edit"'></add-product>
+                    <add-product :id="props.item.id" :type_btn='"edit"' @updateTable="getProducts"></add-product>
                 </td>
                 <td class="btn-column text-xs-center">
                     <v-btn color="red" v-on:click="deleteProduct(props.item.id)"> <i class="material-icons">close</i></v-btn>
@@ -66,11 +66,7 @@
             }
         },
         created: function(){
-            let uri = '/get-products';
-            Axios.get(uri).then((response) => {
-                this.tableHeaders    = response.data.headers;
-                this.tableItems      = response.data.items;
-            });
+            this.getProducts();
         },
 
         computed: {
@@ -80,8 +76,21 @@
         },
         methods: {
             deleteProduct:function (id) {
-                console.log(id);
-            }
+                axios.post('/product/' + id, {
+                    _method: 'DELETE',
+                }).then(response => {
+                    this.$store.dispatch('successBlock', {text:"Товар удалён", time:1000});
+                    this.getProducts();
+                }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
+            },
+
+            getProducts:function () {
+                let uri = '/get-products';
+                Axios.get(uri).then((response) => {
+                    this.tableHeaders    = response.data.headers;
+                    this.tableItems      = response.data.items;
+                });
+            },
         }
     }
 </script>

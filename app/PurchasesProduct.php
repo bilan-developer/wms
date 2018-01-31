@@ -48,17 +48,22 @@ class PurchasesProduct extends Model
         return $this->hasOne('App\Product', 'id', 'id_product');
     }
 
+    /**
+     * Выборка купленного товара.
+     *
+     * @param $id
+     * @return array
+     */
     public static function products($id)
     {
-        $products = PurchasesProduct::all()->where('id_purchases', $id);
+        $purchases = PurchasesProduct::where('id_purchases', $id)->get();
         $result = [];
-        foreach ($products as $key=>$product){
-            $result[$key] = $product->product;
-            $result[$key]['number'] = $product['number'];
-            $result[$key]['amount'] = $product['amount'];
+        foreach ($purchases as $key=>$purchase){
+            $product = current($purchase->product()->withTrashed()->get()->toArray());
+            $productInfo = $purchase->toArray();
+            $result[] = array_merge($product, $productInfo);
         }
+
         return $result;
-
-
     }
 }

@@ -144,13 +144,13 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удаление продукта.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        Product::destroy($id);
     }
 }

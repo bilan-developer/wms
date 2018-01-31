@@ -12,7 +12,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                    <add-form v-if="dialog" :id="id"></add-form>
+                    <add-form v-if="dialog" :id="id" @updateTable="updateTable"></add-form>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -61,6 +61,11 @@
              modRound: function(value, precision){
                 let precision_number = Math.pow(10, precision);
                 return Math.round(value * precision_number) / precision_number;
+            },
+
+            updateTable: function () {
+                 console.log('2 - levels');
+                this.$emit("updateTable");
             }
         }
     }

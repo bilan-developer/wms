@@ -135,10 +135,12 @@
                 }).then(response => {
                     this.$store.dispatch('successBlock', {text:"Товар добавлен", time:1000});
                     this.clear();
+                    console.log('1 - levels');
+
+                    this.$emit("updateTable");
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             },
             update: function () {
-                console.log('Редактирование');
                 axios.post('/product/' + this.id, {
                         _method: 'PUT',
                         name: this.name,
@@ -149,6 +151,8 @@
                         price: this.price
                 }).then(response => {
                     this.$store.dispatch('successBlock', {text:"Товар обновлён", time:1000});
+                    console.log('1 - levels');
+                    this.$emit("updateTable");
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
 
             }
