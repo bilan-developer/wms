@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="col-md-2">
+                <div class="col-md-2 top-left-block">
                     <add-product :type_btn='"add"' @updateTable="getProducts"></add-product>
                 </div>
                 <div class="col-md-7 col-md-offset-3">

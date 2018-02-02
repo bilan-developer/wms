@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <v-card-title>
                 <div class="col-md-2">
-                    <basket></basket>
+                    <basket @updateTable="getProducts"></basket>
                 </div>
                 <div class="col-md-7 col-md-offset-3">
                     <v-text-field
@@ -66,11 +66,7 @@
             }
         },
         created: function(){
-            let uri = '/get-products';
-            Axios.get(uri).then((response) => {
-                this.tableHeaders    = response.data.headers;
-                this.tableItems      = response.data.items;
-            });
+            this.getProducts();
         },
 
         computed: {
@@ -79,7 +75,13 @@
             }
         },
         methods: {
-
+            getProducts: function () {
+                let uri = '/get-products';
+                Axios.get(uri).then((response) => {
+                    this.tableHeaders    = response.data.headers;
+                    this.tableItems      = response.data.items;
+                });
+            }
         }
     }
 </script>

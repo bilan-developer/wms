@@ -1,5 +1,5 @@
 <template>
-    <v-layout row justify-center>
+    <v-layout row justify-left>
         <v-dialog v-model="dialog" persistent max-width="700px">
             <v-btn color="primary" dark slot="activator" v-on:click="getProduct">Добавить</v-btn>
             <v-card>

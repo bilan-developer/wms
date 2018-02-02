@@ -1646,7 +1646,8 @@ var basket = {
 var user = {
     state: {
         user: {
-            name: ''
+            name: '',
+            id_role: 3
         }
     },
     actions: {
@@ -1666,6 +1667,10 @@ var user = {
     getters: {
         user: function user(state) {
             return state.user;
+        },
+        isGuest: function isGuest(state) {
+            console.log(state.user.id_role);
+            return state.user.id_role !== 3;
         }
     }
 };
@@ -64187,6 +64192,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -64213,8 +64225,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             drawer: null,
             items: [{ icon: 'search', text: 'Поиск', comp: 'search' }, { icon: 'home', text: 'Склад', comp: 'stock' }, { icon: 'content_copy', text: 'Отчёты', comp: 'report' }, { icon: 'shopping_basket', text: 'Покупки', comp: 'purchase' }],
             rightMenu: [{ title: 'Настройки', method: "" }, { title: 'Выход', method: function method() {
+                    Axios.get('/logout');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
                     return console.log('Выхddод');
-                } }]
+                }
+            }]
         };
     },
     methods: {
@@ -64222,7 +64239,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log('Выход');
         }
     },
-    mounted: function mounted() {
+    created: function created() {
         // Инициализация пользователя
         this.$store.dispatch('initUser');
     }
@@ -64399,13 +64416,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     created: function created() {
-        var _this = this;
-
-        var uri = '/get-products';
-        Axios.get(uri).then(function (response) {
-            _this.tableHeaders = response.data.headers;
-            _this.tableItems = response.data.items;
-        });
+        this.getProducts();
     },
 
     computed: {
@@ -64413,7 +64424,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.pagination.rowsPerPage ? Math.ceil(this.tableItems.length / this.pagination.rowsPerPage) : 0;
         }
     },
-    methods: {}
+    methods: {
+        getProducts: function getProducts() {
+            var _this = this;
+
+            var uri = '/get-products';
+            Axios.get(uri).then(function (response) {
+                _this.tableHeaders = response.data.headers;
+                _this.tableItems = response.data.items;
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -64666,7 +64687,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-layout",
-    { attrs: { row: "", "justify-center": "" } },
+    { attrs: { row: "", "justify-left": "" } },
     [
       _c(
         "v-dialog",
@@ -65145,6 +65166,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 if (response.data.status === 'ok') {
                     _this.$store.dispatch('successBlock', { text: "Оплаченно", time: 1000 });
                     _this.clearBasket(false);
+                    _this.$emit('updateTable');
                 } else {
                     _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
                 }
@@ -65424,7 +65446,12 @@ var render = function() {
         { staticClass: "col-md-12" },
         [
           _c("v-card-title", [
-            _c("div", { staticClass: "col-md-2" }, [_c("basket")], 1),
+            _c(
+              "div",
+              { staticClass: "col-md-2" },
+              [_c("basket", { on: { updateTable: _vm.getProducts } })],
+              1
+            ),
             _vm._v(" "),
             _c(
               "div",
@@ -67590,7 +67617,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-layout",
-    { attrs: { row: "", "justify-center": "" } },
+    { attrs: { row: "", "justify-left": "" } },
     [
       _c(
         "v-dialog",
@@ -67609,6 +67636,7 @@ var render = function() {
             ? _c(
                 "v-btn",
                 {
+                  staticClass: "top-left-block",
                   attrs: { slot: "activator", color: "primary" },
                   on: { click: function($event) {} },
                   slot: "activator"
@@ -67625,6 +67653,7 @@ var render = function() {
             ? _c(
                 "v-btn",
                 {
+                  staticClass: "top-left-block",
                   attrs: { slot: "activator", color: "success" },
                   on: { click: function($event) {} },
                   slot: "activator"
@@ -67705,7 +67734,7 @@ var render = function() {
           _c("v-card-title", [
             _c(
               "div",
-              { staticClass: "col-md-2" },
+              { staticClass: "col-md-2 top-left-block" },
               [
                 _c("add-product", {
                   attrs: { type_btn: "add" },
@@ -68817,144 +68846,202 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "v-app",
-    { attrs: { id: "inspire" } },
-    [
-      _c("toasts"),
-      _vm._v(" "),
-      _c(
-        "v-navigation-drawer",
-        {
-          attrs: { fixed: "", clipped: "", app: "" },
-          model: {
-            value: _vm.drawer,
-            callback: function($$v) {
-              _vm.drawer = $$v
-            },
-            expression: "drawer"
-          }
-        },
-        [
-          _c(
-            "v-list",
-            { attrs: { dense: "" } },
-            [
-              _vm._l(_vm.items, function(item, i) {
-                return [
-                  item.heading
-                    ? _c(
-                        "v-layout",
-                        { key: i, attrs: { row: "", "align-center": "" } },
-                        [
-                          _c(
-                            "v-flex",
-                            { attrs: { xs6: "" } },
-                            [
-                              item.heading
-                                ? _c("v-subheader", [
-                                    _vm._v(
-                                      "\n                            " +
-                                        _vm._s(item.heading) +
-                                        "\n                        "
-                                    )
-                                  ])
-                                : _vm._e()
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-flex",
-                            {
-                              staticClass: "text-xs-center",
-                              attrs: { xs6: "" }
-                            },
-                            [
-                              _c(
-                                "a",
-                                {
-                                  staticClass: "body-2 black--text",
-                                  attrs: { href: "#!" }
-                                },
-                                [_vm._v("EDIT")]
-                              )
-                            ]
-                          )
-                        ],
-                        1
-                      )
-                    : item.children
-                      ? _c(
-                          "v-list-group",
-                          {
-                            attrs: { "no-action": "" },
-                            model: {
-                              value: item.model,
-                              callback: function($$v) {
-                                _vm.$set(item, "model", $$v)
-                              },
-                              expression: "item.model"
-                            }
-                          },
-                          [
-                            _c(
-                              "v-list-tile",
+  return _c("v-app", { attrs: { id: "inspire" } }, [
+    _vm.$store.getters.isGuest
+      ? _c(
+          "div",
+          [
+            _c(
+              "v-alert",
+              { attrs: { color: "error", icon: "warning", value: "true" } },
+              [
+                _vm._v(
+                  "\n            У вас не доступа к системе обратитесь в поддержку hagrida@yandex.ru\n        "
+                )
+              ]
+            )
+          ],
+          1
+        )
+      : _c(
+          "div",
+          [
+            _c("toasts"),
+            _vm._v(" "),
+            _c(
+              "v-navigation-drawer",
+              {
+                attrs: { fixed: "", clipped: "", app: "" },
+                model: {
+                  value: _vm.drawer,
+                  callback: function($$v) {
+                    _vm.drawer = $$v
+                  },
+                  expression: "drawer"
+                }
+              },
+              [
+                _c(
+                  "v-list",
+                  { attrs: { dense: "" } },
+                  [
+                    _vm._l(_vm.items, function(item, i) {
+                      return [
+                        item.heading
+                          ? _c(
+                              "v-layout",
                               {
-                                attrs: { slot: "item" },
-                                on: { click: function($event) {} },
-                                slot: "item"
+                                key: i,
+                                attrs: { row: "", "align-center": "" }
                               },
                               [
                                 _c(
-                                  "v-list-tile-action",
+                                  "v-flex",
+                                  { attrs: { xs6: "" } },
                                   [
-                                    _c("v-icon", [
-                                      _vm._v(
-                                        _vm._s(
-                                          item.model
-                                            ? item.icon
-                                            : item["icon-alt"]
-                                        )
-                                      )
-                                    ])
+                                    item.heading
+                                      ? _c("v-subheader", [
+                                          _vm._v(
+                                            "\n                                " +
+                                              _vm._s(item.heading) +
+                                              "\n                            "
+                                          )
+                                        ])
+                                      : _vm._e()
                                   ],
                                   1
                                 ),
                                 _vm._v(" "),
                                 _c(
-                                  "v-list-tile-content",
+                                  "v-flex",
+                                  {
+                                    staticClass: "text-xs-center",
+                                    attrs: { xs6: "" }
+                                  },
                                   [
-                                    _c("v-list-tile-title", [
-                                      _vm._v(
-                                        "\n                                " +
-                                          _vm._s(item.text) +
-                                          "\n                            "
-                                      )
-                                    ])
-                                  ],
-                                  1
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "body-2 black--text",
+                                        attrs: { href: "#!" }
+                                      },
+                                      [_vm._v("EDIT")]
+                                    )
+                                  ]
                                 )
                               ],
                               1
-                            ),
-                            _vm._v(" "),
-                            _vm._l(item.children, function(child, i) {
-                              return _c(
-                                "v-list-tile",
-                                { key: i, on: { click: function($event) {} } },
+                            )
+                          : item.children
+                            ? _c(
+                                "v-list-group",
+                                {
+                                  attrs: { "no-action": "" },
+                                  model: {
+                                    value: item.model,
+                                    callback: function($$v) {
+                                      _vm.$set(item, "model", $$v)
+                                    },
+                                    expression: "item.model"
+                                  }
+                                },
                                 [
-                                  child.icon
-                                    ? _c(
+                                  _c(
+                                    "v-list-tile",
+                                    {
+                                      attrs: { slot: "item" },
+                                      on: { click: function($event) {} },
+                                      slot: "item"
+                                    },
+                                    [
+                                      _c(
                                         "v-list-tile-action",
                                         [
                                           _c("v-icon", [
-                                            _vm._v(_vm._s(child.icon))
+                                            _vm._v(
+                                              _vm._s(
+                                                item.model
+                                                  ? item.icon
+                                                  : item["icon-alt"]
+                                              )
+                                            )
+                                          ])
+                                        ],
+                                        1
+                                      ),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-list-tile-content",
+                                        [
+                                          _c("v-list-tile-title", [
+                                            _vm._v(
+                                              "\n                                    " +
+                                                _vm._s(item.text) +
+                                                "\n                                "
+                                            )
                                           ])
                                         ],
                                         1
                                       )
-                                    : _vm._e(),
+                                    ],
+                                    1
+                                  ),
+                                  _vm._v(" "),
+                                  _vm._l(item.children, function(child, i) {
+                                    return _c(
+                                      "v-list-tile",
+                                      {
+                                        key: i,
+                                        on: { click: function($event) {} }
+                                      },
+                                      [
+                                        child.icon
+                                          ? _c(
+                                              "v-list-tile-action",
+                                              [
+                                                _c("v-icon", [
+                                                  _vm._v(_vm._s(child.icon))
+                                                ])
+                                              ],
+                                              1
+                                            )
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        _c(
+                                          "v-list-tile-content",
+                                          [
+                                            _c("v-list-tile-title", [
+                                              _vm._v(
+                                                "\n                                    " +
+                                                  _vm._s(child.text) +
+                                                  "\n                                "
+                                              )
+                                            ])
+                                          ],
+                                          1
+                                        )
+                                      ],
+                                      1
+                                    )
+                                  })
+                                ],
+                                2
+                              )
+                            : _c(
+                                "v-list-tile",
+                                {
+                                  on: {
+                                    click: function($event) {
+                                      _vm.toggle = item.comp
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-list-tile-action",
+                                    [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
+                                    1
+                                  ),
                                   _vm._v(" "),
                                   _c(
                                     "v-list-tile-content",
@@ -68962,7 +69049,7 @@ var render = function() {
                                       _c("v-list-tile-title", [
                                         _vm._v(
                                           "\n                                " +
-                                            _vm._s(child.text) +
+                                            _vm._s(item.text) +
                                             "\n                            "
                                         )
                                       ])
@@ -68972,165 +69059,135 @@ var render = function() {
                                 ],
                                 1
                               )
-                            })
-                          ],
-                          2
-                        )
-                      : _c(
-                          "v-list-tile",
+                      ]
+                    })
+                  ],
+                  2
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-toolbar",
+              {
+                attrs: {
+                  color: "blue darken-3",
+                  dark: "",
+                  app: "",
+                  "clipped-left": "",
+                  fixed: ""
+                }
+              },
+              [
+                _c(
+                  "v-toolbar-title",
+                  {
+                    staticClass: "ml-0 pl-3",
+                    style: _vm.$vuetify.breakpoint.smAndUp
+                      ? "width: 300px; min-width: 250px"
+                      : "min-width: 72px"
+                  },
+                  [
+                    _c("v-toolbar-side-icon", {
+                      on: {
+                        click: function($event) {
+                          $event.stopPropagation()
+                          _vm.drawer = !_vm.drawer
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "hidden-xs-only" }, [
+                      _vm._v("WMS")
+                    ])
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass: "d-flex align-center",
+                    staticStyle: { "margin-left": "auto" }
+                  },
+                  [
+                    _c("a", {
+                      staticClass: "dropdown-toggle",
+                      attrs: {
+                        href: "#",
+                        "data-toggle": "dropdown",
+                        role: "button",
+                        "aria-expanded": "false",
+                        "aria-haspopup": "true"
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("v-toolbar-title", [
+                      _vm._v(_vm._s(_vm.$store.state.user.user.name))
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "v-menu",
+                      { attrs: { bottom: "", left: "" } },
+                      [
+                        _c(
+                          "v-btn",
                           {
-                            on: {
-                              click: function($event) {
-                                _vm.toggle = item.comp
-                              }
-                            }
+                            attrs: { slot: "activator", icon: "", dark: "" },
+                            slot: "activator"
                           },
-                          [
-                            _c(
-                              "v-list-tile-action",
-                              [_c("v-icon", [_vm._v(_vm._s(item.icon))])],
-                              1
-                            ),
-                            _vm._v(" "),
-                            _c(
-                              "v-list-tile-content",
+                          [_c("v-icon", [_vm._v("more_vert")])],
+                          1
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-list",
+                          _vm._l(_vm.rightMenu, function(item) {
+                            return _c(
+                              "v-list-tile",
+                              {
+                                key: item.title,
+                                on: { click: function($event) {} }
+                              },
                               [
-                                _c("v-list-tile-title", [
-                                  _vm._v(
-                                    "\n                            " +
-                                      _vm._s(item.text) +
-                                      "\n                        "
-                                  )
-                                ])
+                                _c(
+                                  "v-list-tile-title",
+                                  { on: { click: item.method } },
+                                  [_vm._v(_vm._s(item.title))]
+                                )
                               ],
                               1
                             )
-                          ],
-                          1
+                          })
                         )
-                ]
-              })
-            ],
-            2
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-toolbar",
-        {
-          attrs: {
-            color: "blue darken-3",
-            dark: "",
-            app: "",
-            "clipped-left": "",
-            fixed: ""
-          }
-        },
-        [
-          _c(
-            "v-toolbar-title",
-            {
-              staticClass: "ml-0 pl-3",
-              style: _vm.$vuetify.breakpoint.smAndUp
-                ? "width: 300px; min-width: 250px"
-                : "min-width: 72px"
-            },
-            [
-              _c("v-toolbar-side-icon", {
-                on: {
-                  click: function($event) {
-                    $event.stopPropagation()
-                    _vm.drawer = !_vm.drawer
-                  }
-                }
-              }),
-              _vm._v(" "),
-              _c("span", { staticClass: "hidden-xs-only" }, [_vm._v("WMS")])
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "d-flex align-center",
-              staticStyle: { "margin-left": "auto" }
-            },
-            [
-              _c("a", {
-                staticClass: "dropdown-toggle",
-                attrs: {
-                  href: "#",
-                  "data-toggle": "dropdown",
-                  role: "button",
-                  "aria-expanded": "false",
-                  "aria-haspopup": "true"
-                }
-              }),
-              _vm._v(" "),
-              _c("v-toolbar-title", [
-                _vm._v(_vm._s(_vm.$store.state.user.user.name))
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-menu",
-                { attrs: { bottom: "", left: "" } },
-                [
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { slot: "activator", icon: "", dark: "" },
-                      slot: "activator"
-                    },
-                    [_c("v-icon", [_vm._v("more_vert")])],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-list",
-                    _vm._l(_vm.rightMenu, function(item) {
-                      return _c(
-                        "v-list-tile",
-                        { key: item.title, on: { click: function($event) {} } },
-                        [
-                          _c(
-                            "v-list-tile-title",
-                            { on: { click: item.method } },
-                            [_vm._v(_vm._s(item.title))]
-                          )
-                        ],
-                        1
-                      )
-                    })
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-content",
-        [
-          _vm.toggle === "search" ? _c("search") : _vm._e(),
-          _vm._v(" "),
-          _vm.toggle === "stock" ? _c("stock") : _vm._e(),
-          _vm._v(" "),
-          _vm.toggle === "report" ? _c("report") : _vm._e(),
-          _vm._v(" "),
-          _vm.toggle === "purchase" ? _c("purchase") : _vm._e()
-        ],
-        1
-      )
-    ],
-    1
-  )
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "v-content",
+              [
+                _vm.toggle === "search" ? _c("search") : _vm._e(),
+                _vm._v(" "),
+                _vm.toggle === "stock" ? _c("stock") : _vm._e(),
+                _vm._v(" "),
+                _vm.toggle === "report" ? _c("report") : _vm._e(),
+                _vm._v(" "),
+                _vm.toggle === "purchase" ? _c("purchase") : _vm._e()
+              ],
+              1
+            )
+          ],
+          1
+        )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

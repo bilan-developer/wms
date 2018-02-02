@@ -1,8 +1,8 @@
 <template>
-    <v-layout row justify-center>
+    <v-layout row justify-left>
         <v-dialog v-model="dialog" persistent max-width="1100px">
-            <v-btn v-if="type_btn === 'edit'" color="primary" slot="activator"  v-on:click=""><i class="material-icons">border_color</i></v-btn>
-            <v-btn v-if="type_btn === 'add'"  color="success" slot="activator"  v-on:click=""><i class="material-icons">add</i></v-btn>
+            <v-btn class="top-left-block" v-if="type_btn === 'edit'" color="primary" slot="activator"  v-on:click=""><i class="material-icons">border_color</i></v-btn>
+            <v-btn class="top-left-block" v-if="type_btn === 'add'"  color="success" slot="activator"  v-on:click=""><i class="material-icons">add</i></v-btn>
             <v-card>
                 <v-toolbar color="indigo" dark>
                     <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>

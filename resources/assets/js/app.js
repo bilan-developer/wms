@@ -92,7 +92,8 @@ const basket =  {
 const user =  {
     state: {
         user: {
-            name: ''
+            name: '',
+            id_role: 3
         }
     },
     actions: {
@@ -105,6 +106,7 @@ const user =  {
             Axios.get('/get-user')
                 .then((response) => {
                     state.user = response.data;
+
                 });
 
         }
@@ -112,6 +114,11 @@ const user =  {
     getters: {
         user(state){
             return state.user
+
+        },
+        isGuest(state){
+            console.log(state.user.id_role);
+            return state.user.id_role !== 3;
         }
     }
 };

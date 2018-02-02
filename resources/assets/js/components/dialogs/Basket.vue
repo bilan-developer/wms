@@ -98,6 +98,7 @@
                         if(response.data.status === 'ok'){
                             this.$store.dispatch('successBlock', {text:"Оплаченно", time:1000});
                             this.clearBasket(false);
+                            this.$emit('updateTable');
                         }else{
                             this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});
                         }

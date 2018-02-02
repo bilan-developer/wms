@@ -11,8 +11,12 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
+});
+Route::get('/logout', function () {
+    Auth::logout();
 });
 //
 Route::get('/get-products', 'ProductController@getProducts');
