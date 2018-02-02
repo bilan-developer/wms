@@ -93,7 +93,7 @@ const user =  {
     state: {
         user: {
             name: '',
-            id_role: 3
+            id_role: 1
         }
     },
     actions: {
@@ -118,7 +118,7 @@ const user =  {
         },
         isGuest(state){
             console.log(state.user.id_role);
-            return state.user.id_role !== 3;
+            return state.user.id_role != 3;
         }
     }
 };
