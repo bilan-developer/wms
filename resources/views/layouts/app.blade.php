@@ -37,7 +37,11 @@
             </nav>
                 @yield('content')
             @else
-                <layout></layout>
+                    @if (Auth::user()->id_role == 3))
+                        <layout></layout>
+                    @else
+                        @yield('content')
+                    @endif
             @endguest
         </div>
 
