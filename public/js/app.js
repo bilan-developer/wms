@@ -64680,7 +64680,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-layout",
-    { attrs: { row: "", "justify-left": "" } },
+    { attrs: { row: "", "justify-right": "" } },
     [
       _c(
         "v-dialog",
@@ -65519,7 +65519,7 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "td",
-                  { staticClass: "text-xs-center" },
+                  { staticClass: "text-xs-right col-md-1 col-md-offset-1" },
                   [_c("add-product-basket", { attrs: { id: props.item.id } })],
                   1
                 )
@@ -65995,6 +65995,66 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuelidate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vuelidate__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -66076,9 +66136,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         units: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minLength: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minLength"])(1) },
         total: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
         all: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
-        price: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) }
-
-        //            category: { required },
+        price: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
+        category: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"] }
     },
     props: {
         id: Number
@@ -66090,18 +66149,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             units: 'шт.',
             total: 0,
             all: 0,
-            price: 0
-            //                category: null,
-            //                categoryItem: [
-            //                    'Item 1',
-            //                    'Item 2',
-            //                    'Item 3',
-            //                    'Item 4'
-            //                ],
+            price: 0,
+            e11: [],
+            people: ['Sandra Adams', 'Ali Connors', 'Trevor Hansen', 'Tucker Smith'],
+            category: null,
+            categoryItem: ['Item 1', 'Item 2', 'Item 3', 'Item 4']
         };
     },
 
     methods: {
+        remove: function remove(item) {
+            this.chips.splice(this.chips.indexOf(item), 1);
+            this.chips = [].concat(_toConsumableArray(this.chips));
+        },
+
         submit: function submit() {
             this.$v.$touch();
             if (!this.$v.$error) {
@@ -66177,12 +66238,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     computed: {
-        //            categoryErrors () {
-        //                const errors = []
-        //                if (!this.$v.category.$dirty) return errors
-        //                !this.$v.category.required && errors.push('Не выбрана категория')
-        //                return errors
-        //            },
+        categoryErrors: function categoryErrors() {
+            var errors = [];
+            if (!this.$v.category.$dirty) return errors;
+            !this.$v.category.required && errors.push('Не выбрана категория');
+            return errors;
+        },
         nameErrors: function nameErrors() {
             var errors = [];
             if (!this.$v.name.$dirty) return errors;
@@ -67580,6 +67641,71 @@ var render = function() {
             _vm.price = _vm._n($$v)
           },
           expression: "price"
+        }
+      }),
+      _vm._v(" "),
+      _c("v-select", {
+        attrs: {
+          label: "Категории",
+          items: _vm.people,
+          "item-text": "name",
+          "item-value": "name",
+          multiple: "",
+          chips: "",
+          "max-height": "auto",
+          autocomplete: ""
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "selection",
+            fn: function(data) {
+              return [
+                _c(
+                  "v-chip",
+                  {
+                    key: JSON.stringify(data.item),
+                    staticClass: "chip--select-multi",
+                    attrs: { close: "", selected: data.selected },
+                    on: {
+                      input: function($event) {
+                        data.parent.selectItem(data.item)
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                " +
+                        _vm._s(data.item) +
+                        "\n            "
+                    )
+                  ]
+                )
+              ]
+            }
+          },
+          {
+            key: "item",
+            fn: function(data) {
+              return [
+                _c(
+                  "v-list-tile-content",
+                  [
+                    _c("v-list-tile-title", {
+                      domProps: { innerHTML: _vm._s(data.item) }
+                    })
+                  ],
+                  1
+                )
+              ]
+            }
+          }
+        ]),
+        model: {
+          value: _vm.e11,
+          callback: function($$v) {
+            _vm.e11 = $$v
+          },
+          expression: "e11"
         }
       }),
       _vm._v(" "),

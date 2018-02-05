@@ -53,14 +53,72 @@
         ></v-text-field>
 
         <!--<v-select-->
-                <!--label="Категория"-->
-                <!--v-model="category"-->
-                <!--:items="categoryItem"-->
-                <!--:error-messages="categoryErrors"-->
-                <!--@change="$v.category.$touch()"-->
-                <!--@blur="$v.category.$touch()"-->
-                <!--required-->
-        <!--&gt;</v-select>-->
+                <!--label="Категории"-->
+                <!--chips-->
+                <!--tags-->
+                <!--solo-->
+                <!--clearable-->
+                <!--v-model="chips"-->
+        <!--&gt;-->
+            <!--<template slot="selection" slot-scope="data">-->
+                <!--<v-chip-->
+                        <!--close-->
+                        <!--outline label color="primary"-->
+                        <!--@input="remove(data.item)"-->
+                        <!--:selected="data.selected"-->
+                <!--&gt;-->
+                    <!--<strong>{{ data.item }}</strong>-->
+                    <!--<span>(interest)</span>-->
+                <!--</v-chip>-->
+            <!--</template>-->
+        <!--</v-select>-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="col-md-10">-->
+                <!--<v-select-->
+                        <!--label="Категория"-->
+                        <!--v-model="category"-->
+                        <!--:items="categoryItem"-->
+                        <!--:error-messages="categoryErrors"-->
+                        <!--@change="$v.category.$touch()"-->
+                        <!--@blur="$v.category.$touch()"-->
+                        <!--required-->
+                <!--&gt;</v-select>-->
+            <!--</div>-->
+            <!--<div class="col-md-1 col-offers-1">-->
+                <!--<v-btn fab dark small color="indigo">-->
+                    <!--<v-icon dark>add</v-icon>-->
+                <!--</v-btn>-->
+            <!--</div>-->
+        <!--</div>-->
+        <v-select
+                label="Категории"
+                v-bind:items="people"
+                v-model="e11"
+                item-text="name"
+                item-value="name"
+                multiple
+                chips
+                max-height="auto"
+                autocomplete
+        >
+            <template slot="selection" slot-scope="data">
+                <v-chip
+                        close
+                        @input="data.parent.selectItem(data.item)"
+                        :selected="data.selected"
+                        class="chip--select-multi"
+                        :key="JSON.stringify(data.item)"
+                >
+                    {{ data.item  }}
+                </v-chip>
+            </template>
+            <template slot="item" slot-scope="data">
+                <v-list-tile-content>
+                    <v-list-tile-title v-html="data.item"></v-list-tile-title>
+                </v-list-tile-content>
+            </template>
+        </v-select>
+
 
 
         <v-btn @click="submit">Добавить</v-btn>
@@ -80,8 +138,7 @@
             total: { required, minValue: minValue(0) },
             all: { required, minValue: minValue(0) },
             price: { required, minValue: minValue(0) },
-
-//            category: { required },
+            category: { required },
         },
         props: {
             id: Number
@@ -94,16 +151,22 @@
                 total: 0,
                 all: 0,
                 price: 0,
-//                category: null,
-//                categoryItem: [
-//                    'Item 1',
-//                    'Item 2',
-//                    'Item 3',
-//                    'Item 4'
-//                ],
+                e11: [],
+                people: ['Sandra Adams', 'Ali Connors', 'Trevor Hansen', 'Tucker Smith'],
+                category: null,
+                categoryItem: [
+                    'Item 1',
+                    'Item 2',
+                    'Item 3',
+                    'Item 4'
+                ],
             }
         },
         methods: {
+            remove(item) {
+                this.chips.splice(this.chips.indexOf(item), 1)
+                this.chips = [...this.chips]
+            },
             submit: function () {
                 this.$v.$touch();
                 if (!this.$v.$error) {
@@ -174,12 +237,12 @@
             }
         },
         computed: {
-//            categoryErrors () {
-//                const errors = []
-//                if (!this.$v.category.$dirty) return errors
-//                !this.$v.category.required && errors.push('Не выбрана категория')
-//                return errors
-//            },
+            categoryErrors () {
+                const errors = []
+                if (!this.$v.category.$dirty) return errors
+                !this.$v.category.required && errors.push('Не выбрана категория')
+                return errors
+            },
             nameErrors () {
                 const errors = []
                 if (!this.$v.name.$dirty) return errors

@@ -45,4 +45,12 @@ class Product extends Model
         return false;
 
     }
+
+    /**
+     * Категории, принадлежащие товару.
+     */
+    public function categories()
+    {
+        return $this->belongsToMany('App\Category', 'category_product', 'id_product', 'id_category');
+    }
 }

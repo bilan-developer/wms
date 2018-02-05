@@ -34,7 +34,7 @@
                 <td class="text-xs-center">{{ props.item.total }}</td>
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
-                <td class="text-xs-center">
+                <td class="text-xs-right col-md-1 col-md-offset-1">
                     <add-product-basket :id="props.item.id"></add-product-basket>
                 </td>
             </template>
