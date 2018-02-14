@@ -11,6 +11,10 @@
 |
 */
 
+Route::resource('/product','ProductController');
+Route::resource('/purchase','PurchaseController');
+Route::resource('/category','CategoryController');
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,8 +22,7 @@ Route::get('/', function () {
 Route::get('/logout', function () {
     Auth::logout();
 });
-//
-Route::get('/get-products', 'ProductController@getProducts');
+
 Route::post('pay', 'ProductController@pay');
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -27,9 +30,7 @@ Route::get('/get-user', function () {
     return \Illuminate\Support\Facades\Auth::user();
 });
 
-Route::resource('/product','ProductController');
-Route::resource('/purchase','PurchaseController');
-Auth::routes();
+
 
 
 

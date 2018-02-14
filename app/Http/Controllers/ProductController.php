@@ -10,25 +10,6 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
 
-    public function getProducts()
-    {
-        $headers = [
-
-            [ 'text' => 'Название', 'value' => 'name',  'align' => 'left'],
-            [ 'text' => 'Марка',    'value' => 'tm',    'align' => 'left'],
-            [ 'text' => 'Ед.',      'value' => 'units', 'align' => 'center'],
-            [ 'text' => 'В наличии', 'value' => 'total',   'align' => 'center'],
-            [ 'text' => 'Необходимо' ,'value' => 'all',    'align' => 'center'],
-            [ 'text' => 'Цена',     'value' => 'price', 'align' => 'center']
-        ];
-
-        $products = Product::orderBy('id','DESC')->get()->toArray();
-
-        $result = ['headers' => $headers, 'items' => $products];
-
-        return json_encode($result);
-    }
-
     /**
      * Обработка покупки.
      *
@@ -69,13 +50,26 @@ class ProductController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Вывод таблици с продуктами.
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      */
     public function index()
     {
-        //
+        $headers = [
+
+            [ 'text' => 'Название', 'value' => 'name',  'align' => 'left'],
+            [ 'text' => 'Марка',    'value' => 'tm',    'align' => 'left'],
+            [ 'text' => 'Ед.',      'value' => 'units', 'align' => 'center'],
+            [ 'text' => 'В наличии', 'value' => 'total',   'align' => 'center'],
+            [ 'text' => 'Необходимо' ,'value' => 'all',    'align' => 'center'],
+            [ 'text' => 'Цена',     'value' => 'price', 'align' => 'center']
+        ];
+
+        $products = Product::orderBy('id','DESC')->get()->toArray();
+        $result = ['headers' => $headers, 'items' => $products];
+
+        return json_encode($result);
     }
 
     /**
@@ -97,7 +91,12 @@ class ProductController extends Controller
      */
     public function store(Product $product, Request $request)
     {
-        $product->create($request->toArray());
+        $data = $request->toArray();
+        $product = $product->create($data);
+
+        foreach ($data['categories'] as $category){
+            $product->categories()->attach(['id_category' => $category]);
+        }
     }
 
     /**
@@ -109,9 +108,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::all()->where('id', '=', $id)->toArray();
-        $result = ['product' => array_shift($product)];
-
+        $result = Product::one($id);
         return json_encode($result);
     }
 
@@ -137,8 +134,14 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $data = $request->toArray();
         $product = Product::find($id);
-        $product->update($request->toArray());
+        $product->update($data);
+
+        $product->categories()->detach();
+        foreach ($data['categories'] as $category){
+            $product->categories()->attach(['id_category' => $category]);
+        }
 
         return json_encode($product);
     }

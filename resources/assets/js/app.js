@@ -106,28 +106,45 @@ const user =  {
             Axios.get('/get-user')
                 .then((response) => {
                     state.user = response.data;
-
                 });
-
         }
     },
     getters: {
-        user(state){
-            return state.user
-
-        },
-        isGuest(state){
-            console.log(state.user.id_role);
-            return state.user.id_role != 3;
+        user(state){ return state.user },
+        isGuest(state){ return state.user.id_role != 3;}
+    }
+};
+const categories =  {
+    state: {
+        categories: {}
+    },
+    actions: {
+        getCategories({commit}) {
+            commit('GET_CATEGORIES')
+        }
+    },
+    mutations: {
+        GET_CATEGORIES(state) {
+            Axios.get('/category')
+                .then((response) => {
+                    state.categories = response.data;
+                });
+        }
+    },
+    getters: {
+        categories(state){
+            return state.categories
         }
     }
 };
+
 
 const store = new Vuex.Store({
     modules: {
         toasts: toasts,
         basket: basket,
-        user  : user
+        user  : user,
+        categories: categories
     }
 });
 

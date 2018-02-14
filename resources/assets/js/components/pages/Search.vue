@@ -76,11 +76,11 @@
         },
         methods: {
             getProducts: function () {
-                let uri = '/get-products';
+                let uri = '/product';
                 Axios.get(uri).then((response) => {
-                    this.tableHeaders    = response.data.headers;
-                    this.tableItems      = response.data.items;
-                });
+                    this.tableHeaders = response.data.headers;
+                    this.tableItems   = response.data.items;
+                }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             }
         }
     }

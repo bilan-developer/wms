@@ -52,48 +52,10 @@
                 required
         ></v-text-field>
 
-        <!--<v-select-->
-                <!--label="Категории"-->
-                <!--chips-->
-                <!--tags-->
-                <!--solo-->
-                <!--clearable-->
-                <!--v-model="chips"-->
-        <!--&gt;-->
-            <!--<template slot="selection" slot-scope="data">-->
-                <!--<v-chip-->
-                        <!--close-->
-                        <!--outline label color="primary"-->
-                        <!--@input="remove(data.item)"-->
-                        <!--:selected="data.selected"-->
-                <!--&gt;-->
-                    <!--<strong>{{ data.item }}</strong>-->
-                    <!--<span>(interest)</span>-->
-                <!--</v-chip>-->
-            <!--</template>-->
-        <!--</v-select>-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="col-md-10">-->
-                <!--<v-select-->
-                        <!--label="Категория"-->
-                        <!--v-model="category"-->
-                        <!--:items="categoryItem"-->
-                        <!--:error-messages="categoryErrors"-->
-                        <!--@change="$v.category.$touch()"-->
-                        <!--@blur="$v.category.$touch()"-->
-                        <!--required-->
-                <!--&gt;</v-select>-->
-            <!--</div>-->
-            <!--<div class="col-md-1 col-offers-1">-->
-                <!--<v-btn fab dark small color="indigo">-->
-                    <!--<v-icon dark>add</v-icon>-->
-                <!--</v-btn>-->
-            <!--</div>-->
-        <!--</div>-->
         <v-select
                 label="Категории"
-                v-bind:items="people"
-                v-model="e11"
+                v-bind:items="categories"
+                v-model="categoriesSelect"
                 item-text="name"
                 item-value="name"
                 multiple
@@ -101,27 +63,30 @@
                 max-height="auto"
                 autocomplete
         >
+
             <template slot="selection" slot-scope="data">
                 <v-chip
                         close
+                        outline
+                        label
+                        color="primary"
                         @input="data.parent.selectItem(data.item)"
-                        :selected="data.selected"
                         class="chip--select-multi"
                         :key="JSON.stringify(data.item)"
                 >
-                    {{ data.item  }}
+                    {{ data.item.name }}
                 </v-chip>
             </template>
             <template slot="item" slot-scope="data">
                 <v-list-tile-content>
-                    <v-list-tile-title v-html="data.item"></v-list-tile-title>
+                    <v-list-tile-title  v-html="data.item.name"></v-list-tile-title>
                 </v-list-tile-content>
             </template>
         </v-select>
 
 
 
-        <v-btn @click="submit">Добавить</v-btn>
+        <v-btn @click="submit">Сохранить</v-btn>
         <v-btn @click="clear">Очистить</v-btn>
     </form>
 </template>
@@ -138,7 +103,6 @@
             total: { required, minValue: minValue(0) },
             all: { required, minValue: minValue(0) },
             price: { required, minValue: minValue(0) },
-            category: { required },
         },
         props: {
             id: Number
@@ -151,15 +115,8 @@
                 total: 0,
                 all: 0,
                 price: 0,
-                e11: [],
-                people: ['Sandra Adams', 'Ali Connors', 'Trevor Hansen', 'Tucker Smith'],
-                category: null,
-                categoryItem: [
-                    'Item 1',
-                    'Item 2',
-                    'Item 3',
-                    'Item 4'
-                ],
+                categoriesSelect: [],
+                categories: this.$store.getters.categories,
             }
         },
         methods: {
@@ -185,7 +142,7 @@
                 this.total = 0;
                 this.all = 0;
                 this.price= 0;
-                this.category = null;
+                this.categoriesSelect = [];
             },
             create: function() {
                 axios.post('/product', {
@@ -194,12 +151,11 @@
                     units: this.units,
                     total: this.total,
                     all: this.all,
-                    price: this.price
+                    price: this.price,
+                    categories: this.getCategoryId()
                 }).then(response => {
                     this.$store.dispatch('successBlock', {text:"Товар добавлен", time:1000});
                     this.clear();
-                    console.log('1 - levels');
-
                     this.$emit("updateTable");
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             },
@@ -211,38 +167,47 @@
                         units: this.units,
                         total: this.total,
                         all: this.all,
-                        price: this.price
+                        price: this.price,
+                        categories: this.getCategoryId()
                 }).then(response => {
                     this.$store.dispatch('successBlock', {text:"Товар обновлён", time:1000});
-                    console.log('1 - levels');
                     this.$emit("updateTable");
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
+            },
+            getCategoryId: function () {
+                let id = [];
+                let categoriesSelect = this.categoriesSelect;
+                this.categories.filter(function (value) {
+                    if(categoriesSelect.indexOf(value.name) !== -1){
+                        id.push(value.id);
+                    }
+                });
 
+                return id;
             }
 
         },
         mounted: function () {
             if(this.id){
-                console.log('Редактирование');
                 let url = '/product/' + this.id;
-                    axios.get(url).then((response) => {
-                        let product = response.data.product;
-                        this.name  = product.name,
-                        this.tm    =  product.tm,
-                        this.units = product.units,
-                        this.total = product.total,
-                        this.all   = product.all,
-                        this.price =  product.price
+                axios.get(url).then((response) => {
+                    let product = response.data.product;
+                    this.name  = product.name,
+                    this.tm    =  product.tm,
+                    this.units = product.units,
+                    this.total = product.total,
+                    this.all   = product.all,
+                    this.price =  product.price,
+                    this.categoriesSelect = product.categories
                 });
+                axios.get().then((response) => {
+                    this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});
+
+                });
+
             }
         },
         computed: {
-            categoryErrors () {
-                const errors = []
-                if (!this.$v.category.$dirty) return errors
-                !this.$v.category.required && errors.push('Не выбрана категория')
-                return errors
-            },
             nameErrors () {
                 const errors = []
                 if (!this.$v.name.$dirty) return errors

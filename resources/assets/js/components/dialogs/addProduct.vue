@@ -64,7 +64,6 @@
             },
 
             updateTable: function () {
-                 console.log('2 - levels');
                 this.$emit("updateTable");
             }
         }

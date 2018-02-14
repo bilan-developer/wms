@@ -67,6 +67,7 @@
         },
         created: function(){
             this.getProducts();
+            this.getCategories()
         },
 
         computed: {
@@ -85,11 +86,14 @@
             },
 
             getProducts:function () {
-                let uri = '/get-products';
+                let uri = '/product';
                 Axios.get(uri).then((response) => {
                     this.tableHeaders    = response.data.headers;
                     this.tableItems      = response.data.items;
                 });
+            },
+            getCategories:function () {
+                this.$store.dispatch('getCategories');
             },
         }
     }

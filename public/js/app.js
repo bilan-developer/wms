@@ -1669,8 +1669,31 @@ var user = {
             return state.user;
         },
         isGuest: function isGuest(state) {
-            console.log(state.user.id_role);
             return state.user.id_role != 3;
+        }
+    }
+};
+var categories = {
+    state: {
+        categories: {}
+    },
+    actions: {
+        getCategories: function getCategories(_ref8) {
+            var commit = _ref8.commit;
+
+            commit('GET_CATEGORIES');
+        }
+    },
+    mutations: {
+        GET_CATEGORIES: function GET_CATEGORIES(state) {
+            Axios.get('/category').then(function (response) {
+                state.categories = response.data;
+            });
+        }
+    },
+    getters: {
+        categories: function categories(state) {
+            return state.categories;
         }
     }
 };
@@ -1679,7 +1702,8 @@ var store = new Vuex.Store({
     modules: {
         toasts: toasts,
         basket: basket,
-        user: user
+        user: user,
+        categories: categories
     }
 });
 
@@ -64421,10 +64445,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getProducts: function getProducts() {
             var _this = this;
 
-            var uri = '/get-products';
+            var uri = '/product';
             Axios.get(uri).then(function (response) {
                 _this.tableHeaders = response.data.headers;
                 _this.tableItems = response.data.items;
+            }).catch(function (e) {
+                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
         }
     }
@@ -65730,6 +65756,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     created: function created() {
         this.getProducts();
+        this.getCategories();
     },
 
     computed: {
@@ -65754,11 +65781,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getProducts: function getProducts() {
             var _this2 = this;
 
-            var uri = '/get-products';
+            var uri = '/product';
             Axios.get(uri).then(function (response) {
                 _this2.tableHeaders = response.data.headers;
                 _this2.tableItems = response.data.items;
             });
+        },
+        getCategories: function getCategories() {
+            this.$store.dispatch('getCategories');
         }
     }
 });
@@ -65931,7 +65961,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         updateTable: function updateTable() {
-            console.log('2 - levels');
             this.$emit("updateTable");
         }
     }
@@ -66089,41 +66118,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -66136,8 +66130,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         units: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minLength: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minLength"])(1) },
         total: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
         all: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
-        price: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
-        category: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"] }
+        price: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) }
     },
     props: {
         id: Number
@@ -66150,10 +66143,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             total: 0,
             all: 0,
             price: 0,
-            e11: [],
-            people: ['Sandra Adams', 'Ali Connors', 'Trevor Hansen', 'Tucker Smith'],
-            category: null,
-            categoryItem: ['Item 1', 'Item 2', 'Item 3', 'Item 4']
+            categoriesSelect: [],
+            categories: this.$store.getters.categories
         };
     },
 
@@ -66181,7 +66172,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.total = 0;
             this.all = 0;
             this.price = 0;
-            this.category = null;
+            this.categoriesSelect = [];
         },
 
         create: function create() {
@@ -66193,12 +66184,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 units: this.units,
                 total: this.total,
                 all: this.all,
-                price: this.price
+                price: this.price,
+                categories: this.getCategoryId()
             }).then(function (response) {
                 _this.$store.dispatch('successBlock', { text: "Товар добавлен", time: 1000 });
                 _this.clear();
-                console.log('1 - levels');
-
                 _this.$emit("updateTable");
             }).catch(function (e) {
                 _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
@@ -66214,14 +66204,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                 units: this.units,
                 total: this.total,
                 all: this.all,
-                price: this.price
+                price: this.price,
+                categories: this.getCategoryId()
             }).then(function (response) {
                 _this2.$store.dispatch('successBlock', { text: "Товар обновлён", time: 1000 });
-                console.log('1 - levels');
                 _this2.$emit("updateTable");
             }).catch(function (e) {
                 _this2.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
+        },
+        getCategoryId: function getCategoryId() {
+            var id = [];
+            var categoriesSelect = this.categoriesSelect;
+            this.categories.filter(function (value) {
+                if (categoriesSelect.indexOf(value.name) !== -1) {
+                    id.push(value.id);
+                }
+            });
+
+            return id;
         }
 
     },
@@ -66229,21 +66230,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         var _this3 = this;
 
         if (this.id) {
-            console.log('Редактирование');
             var url = '/product/' + this.id;
             axios.get(url).then(function (response) {
                 var product = response.data.product;
-                _this3.name = product.name, _this3.tm = product.tm, _this3.units = product.units, _this3.total = product.total, _this3.all = product.all, _this3.price = product.price;
+                _this3.name = product.name, _this3.tm = product.tm, _this3.units = product.units, _this3.total = product.total, _this3.all = product.all, _this3.price = product.price, _this3.categoriesSelect = product.categories;
+            });
+            axios.get().then(function (response) {
+                _this3.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
         }
     },
     computed: {
-        categoryErrors: function categoryErrors() {
-            var errors = [];
-            if (!this.$v.category.$dirty) return errors;
-            !this.$v.category.required && errors.push('Не выбрана категория');
-            return errors;
-        },
         nameErrors: function nameErrors() {
             var errors = [];
             if (!this.$v.name.$dirty) return errors;
@@ -67647,7 +67644,7 @@ var render = function() {
       _c("v-select", {
         attrs: {
           label: "Категории",
-          items: _vm.people,
+          items: _vm.categories,
           "item-text": "name",
           "item-value": "name",
           multiple: "",
@@ -67665,7 +67662,12 @@ var render = function() {
                   {
                     key: JSON.stringify(data.item),
                     staticClass: "chip--select-multi",
-                    attrs: { close: "", selected: data.selected },
+                    attrs: {
+                      close: "",
+                      outline: "",
+                      label: "",
+                      color: "primary"
+                    },
                     on: {
                       input: function($event) {
                         data.parent.selectItem(data.item)
@@ -67675,7 +67677,7 @@ var render = function() {
                   [
                     _vm._v(
                       "\n                " +
-                        _vm._s(data.item) +
+                        _vm._s(data.item.name) +
                         "\n            "
                     )
                   ]
@@ -67691,7 +67693,7 @@ var render = function() {
                   "v-list-tile-content",
                   [
                     _c("v-list-tile-title", {
-                      domProps: { innerHTML: _vm._s(data.item) }
+                      domProps: { innerHTML: _vm._s(data.item.name) }
                     })
                   ],
                   1
@@ -67701,15 +67703,15 @@ var render = function() {
           }
         ]),
         model: {
-          value: _vm.e11,
+          value: _vm.categoriesSelect,
           callback: function($$v) {
-            _vm.e11 = $$v
+            _vm.categoriesSelect = $$v
           },
-          expression: "e11"
+          expression: "categoriesSelect"
         }
       }),
       _vm._v(" "),
-      _c("v-btn", { on: { click: _vm.submit } }, [_vm._v("Добавить")]),
+      _c("v-btn", { on: { click: _vm.submit } }, [_vm._v("Сохранить")]),
       _vm._v(" "),
       _c("v-btn", { on: { click: _vm.clear } }, [_vm._v("Очистить")])
     ],

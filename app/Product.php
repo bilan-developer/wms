@@ -23,6 +23,17 @@ class Product extends Model
         'nds'
     ];
 
+    public static function one($id)
+    {
+        $product = Product::where('id', $id)->first();
+
+        $categories = $product->categories()->get()->toArray();
+        $result = ['product' => $product->toArray()];
+        $result['product']['categories'] = array_column($categories, 'name');
+
+        return $result;
+    }
+
 
     /**
      * Обновляем количество продуктов оставшихся в магазине.
