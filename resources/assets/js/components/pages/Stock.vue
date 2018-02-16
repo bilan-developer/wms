@@ -2,9 +2,13 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="col-md-2 top-left-block">
-                    <add-product :type_btn='"add"' @updateTable="getProducts"></add-product>
+                <div class="col-md-1 top-left-block">
+                    <product :type_btn='"add"' @updateTable="getProducts"></product>
                 </div>
+                <div class="col-md-1 top-left-block">
+                    <categoty></categoty>
+                </div>
+
                 <div class="col-md-7 col-md-offset-3">
                     <v-text-field
                             append-icon="search"
@@ -34,10 +38,13 @@
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="btn-column text-xs-center">
-                    <add-product :id="props.item.id" :type_btn='"edit"' @updateTable="getProducts"></add-product>
+                    <product :id="props.item.id" :type_btn='"edit"' @updateTable="getProducts"></product>
                 </td>
                 <td class="btn-column text-xs-center">
-                    <v-btn color="red" v-on:click="deleteProduct(props.item.id)"> <i class="material-icons">close</i></v-btn>
+                    <v-tooltip top>
+                        <v-btn color="red" slot="activator" v-on:click="deleteProduct(props.item.id)"> <i class="material-icons">close</i></v-btn>
+                        <span>Удалить товар</span>
+                    </v-tooltip>
                 </td>
             </template>
         </v-data-table>
@@ -48,12 +55,14 @@
 </template>
 
 <script>
-    import addProduct from '../dialogs/addProduct.vue';
+    import product from '../dialogs/Product.vue';
+    import categoty from '../dialogs/Categoty.vue';
 
     export default {
 
         components: {
-            addProduct
+            product,
+            categoty
         },
 
         data () {

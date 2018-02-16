@@ -116,7 +116,7 @@ const user =  {
 };
 const categories =  {
     state: {
-        categories: {}
+        categories: []
     },
     actions: {
         getCategories({commit}) {

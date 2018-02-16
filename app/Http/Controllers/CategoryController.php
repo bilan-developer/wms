@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return  Category::orderBy('id','DESC')->get()->toArray();
+        return  json_encode(Category::orderBy('id','DESC')->get()->toArray());
     }
 
     /**

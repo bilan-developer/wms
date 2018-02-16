@@ -1,8 +1,14 @@
 <template>
     <v-layout row justify-left>
         <v-dialog v-model="dialog" persistent max-width="1100px">
-            <v-btn class="top-left-block" v-if="type_btn === 'edit'" color="primary" slot="activator"  v-on:click=""><i class="material-icons">border_color</i></v-btn>
-            <v-btn class="top-left-block" v-if="type_btn === 'add'"  color="success" slot="activator"  v-on:click=""><i class="material-icons">add</i></v-btn>
+            <v-tooltip top slot="activator" >
+                <v-btn class="top-left-block" slot="activator" v-if="type_btn === 'add'" color="success" v-on:click=""><i class="material-icons">add</i></v-btn>
+                <span>Добавить товар</span>
+            </v-tooltip>
+            <v-tooltip top slot="activator">
+                <v-btn class="top-left-block" v-if="type_btn === 'edit'" slot="activator" color="primary" v-on:click=""><i class="material-icons">border_color</i></v-btn>
+                <span>Редактировать товар</span>
+            </v-tooltip>
             <v-card>
                 <v-toolbar color="indigo" dark>
                     <v-toolbar-title>{{ toolbarTitle }}</v-toolbar-title>
@@ -12,7 +18,7 @@
                     </v-btn>
                 </v-toolbar>
                 <v-card-text>
-                    <add-form v-if="dialog" :id="id" @updateTable="updateTable"></add-form>
+                    <product-form v-if="dialog" :id="id" @updateTable="updateTable"></product-form>
                 </v-card-text>
             </v-card>
         </v-dialog>
@@ -20,11 +26,11 @@
 </template>
 
 <script>
-    import addForm from '../form/addProductForm.vue';
+    import productForm from '../form/ProductForm.vue';
     
     export default {
         components: {
-            addForm
+            productForm
         },
         props: {
             id: Number,
@@ -66,7 +72,8 @@
             updateTable: function () {
                 this.$emit("updateTable");
             }
-        }
+        },
+
     }
 </script>
 <style>

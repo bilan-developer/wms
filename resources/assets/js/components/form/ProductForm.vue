@@ -143,6 +143,7 @@
                 this.all = 0;
                 this.price= 0;
                 this.categoriesSelect = [];
+                console.log(this.categories);
             },
             create: function() {
                 axios.post('/product', {
