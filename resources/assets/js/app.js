@@ -121,6 +121,9 @@ const categories =  {
     actions: {
         getCategories({commit}) {
             commit('GET_CATEGORIES')
+        },
+        addCategory({commit}, data) {
+            commit('ADD_CATEGORY',data)
         }
     },
     mutations: {
@@ -129,6 +132,9 @@ const categories =  {
                 .then((response) => {
                     state.categories = response.data;
                 });
+        },
+        ADD_CATEGORY(state, data) {
+            state.categories.push(data);
         }
     },
     getters: {

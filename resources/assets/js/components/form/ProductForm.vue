@@ -11,10 +11,6 @@
         <v-text-field
                 label="Марка"
                 v-model="tm"
-                :error-messages="tmErrors"
-                @input="$v.tm.$touch()"
-                @blur="$v.tm.$touch()"
-                required
         ></v-text-field>
         <v-text-field
                 label="Ед."
@@ -98,7 +94,6 @@
         mixins: [validationMixin],
         validations: {
             name: { required, minLength: minLength(3) },
-            tm: { required, minLength: minLength(3) },
             units: { required, minLength: minLength(1) },
             total: { required, minValue: minValue(0) },
             all: { required, minValue: minValue(0) },
@@ -143,7 +138,6 @@
                 this.all = 0;
                 this.price= 0;
                 this.categoriesSelect = [];
-                console.log(this.categories);
             },
             create: function() {
                 axios.post('/product', {
@@ -214,13 +208,6 @@
                 if (!this.$v.name.$dirty) return errors
                 !this.$v.name.minLength && errors.push('Название должно содержать больше 3 символов')
                 !this.$v.name.required && errors.push('Укажите название товара')
-                return errors
-            },
-            tmErrors () {
-                const errors = []
-                if (!this.$v.tm.$dirty) return errors
-                !this.$v.tm.minLength && errors.push('Марка товара должна содержать больше 3 символов')
-                !this.$v.tm.required && errors.push('Укажите марку товара')
                 return errors
             },
             unitsErrors () {

@@ -28,14 +28,17 @@ class CategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Добавление категории.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Category $category
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Category
      */
-    public function store(Request $request)
+    public function store(Category $category, Request $request)
     {
-        //
+        $category = $category->create($request->toArray());
+        return $category;
     }
 
     /**
@@ -73,13 +76,15 @@ class CategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Удаление категории.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $category->products()->detach();
+        $category->delete();
     }
 }

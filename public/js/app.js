@@ -1682,6 +1682,11 @@ var categories = {
             var commit = _ref8.commit;
 
             commit('GET_CATEGORIES');
+        },
+        addCategory: function addCategory(_ref9, data) {
+            var commit = _ref9.commit;
+
+            commit('ADD_CATEGORY', data);
         }
     },
     mutations: {
@@ -1689,6 +1694,9 @@ var categories = {
             Axios.get('/category').then(function (response) {
                 state.categories = response.data;
             });
+        },
+        ADD_CATEGORY: function ADD_CATEGORY(state, data) {
+            state.categories.push(data);
         }
     },
     getters: {
@@ -68915,35 +68923,8 @@ exports.push([module.i, "\n.btn-close{\n    cursor: pointer;\n}\n", ""]);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_CategoryForm_vue__ = __webpack_require__(144);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__form_CategoryForm_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__form_CategoryForm_vue__);
 //
 //
 //
@@ -68994,14 +68975,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+    components: {
+        categoryForm: __WEBPACK_IMPORTED_MODULE_0__form_CategoryForm_vue___default.a
+    },
     data: function data() {
         return {
             dialog: false,
             dialogForm: false,
-            editedItem: {
-                name: ''
-            },
+            name: '',
             toolbarTitle: 'Управление категориями',
             max25chars: function max25chars(v) {
                 return v.length <= 25 || 'Длинное название';
@@ -69015,12 +68999,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          */
         closeDialog: function closeDialog() {
             this.dialog = false;
-            console.log(this.categories);
-            console.log(this.$store.getters.categories);
         },
+
+        /**
+         * Удаление категории.
+         */
         deleteCategory: function deleteCategory(item) {
-            var index = this.$store.getters.categories.indexOf(item);
-            this.$store.getters.categories.splice(index, 1);
+            var _this = this;
+
+            axios.post('/category/' + item.id, {
+                _method: 'DELETE'
+            }).then(function (response) {
+                var index = _this.$store.getters.categories.indexOf(item);
+                _this.$store.getters.categories.splice(index, 1);
+                _this.$store.dispatch('successBlock', { text: "Категория удалена", time: 1000 });
+            }).catch(function (e) {
+                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
         }
     }
 });
@@ -69095,136 +69090,7 @@ var render = function() {
                 "v-card-text",
                 { staticStyle: { height: "400px" } },
                 [
-                  _c(
-                    "v-dialog",
-                    {
-                      attrs: { "max-width": "400px" },
-                      model: {
-                        value: _vm.dialogForm,
-                        callback: function($$v) {
-                          _vm.dialogForm = $$v
-                        },
-                        expression: "dialogForm"
-                      }
-                    },
-                    [
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "mx-0",
-                          attrs: { slot: "activator", icon: "" },
-                          slot: "activator"
-                        },
-                        [
-                          _c("v-icon", { attrs: { color: "pink" } }, [
-                            _vm._v("add")
-                          ])
-                        ],
-                        1
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-card",
-                        [
-                          _c(
-                            "v-toolbar",
-                            { attrs: { color: "purple", dark: "" } },
-                            [
-                              _c("v-card-title", [
-                                _c("span", { staticClass: "headline" }, [
-                                  _vm._v("Добавить категорию")
-                                ])
-                              ]),
-                              _vm._v(" "),
-                              _c("v-spacer"),
-                              _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: { icon: "" },
-                                  on: {
-                                    click: function($event) {
-                                      _vm.dialogForm = false
-                                    }
-                                  }
-                                },
-                                [_c("v-icon", [_vm._v("close")])],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-text",
-                            [
-                              _c(
-                                "v-container",
-                                { attrs: { "grid-list-md": "" } },
-                                [
-                                  _c(
-                                    "v-layout",
-                                    { attrs: { wrap: "" } },
-                                    [
-                                      _c(
-                                        "v-flex",
-                                        {
-                                          attrs: { xs12: "", sm6: "", md4: "" }
-                                        },
-                                        [
-                                          _c("v-text-field", {
-                                            attrs: { label: "Название" },
-                                            model: {
-                                              value: _vm.editedItem.name,
-                                              callback: function($$v) {
-                                                _vm.$set(
-                                                  _vm.editedItem,
-                                                  "name",
-                                                  $$v
-                                                )
-                                              },
-                                              expression: "editedItem.name"
-                                            }
-                                          })
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-card-actions",
-                            [
-                              _c("v-spacer"),
-                              _vm._v(" "),
-                              _c(
-                                "v-btn",
-                                {
-                                  attrs: { color: "blue darken-1", flat: "" },
-                                  nativeOn: {
-                                    click: function($event) {
-                                      _vm.save($event)
-                                    }
-                                  }
-                                },
-                                [_vm._v("Сохранить")]
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
+                  _c("category-form"),
                   _vm._v(" "),
                   _c("v-data-table", {
                     attrs: {
@@ -69483,10 +69349,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
 
 
 
@@ -69495,7 +69357,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     mixins: [__WEBPACK_IMPORTED_MODULE_0_vuelidate__["validationMixin"]],
     validations: {
         name: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minLength: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minLength"])(3) },
-        tm: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minLength: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minLength"])(3) },
         units: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minLength: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minLength"])(1) },
         total: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
         all: { required: __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["required"], minValue: Object(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__["minValue"])(0) },
@@ -69542,7 +69403,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             this.all = 0;
             this.price = 0;
             this.categoriesSelect = [];
-            console.log(this.categories);
         },
 
         create: function create() {
@@ -69618,13 +69478,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             !this.$v.name.required && errors.push('Укажите название товара');
             return errors;
         },
-        tmErrors: function tmErrors() {
-            var errors = [];
-            if (!this.$v.tm.$dirty) return errors;
-            !this.$v.tm.minLength && errors.push('Марка товара должна содержать больше 3 символов');
-            !this.$v.tm.required && errors.push('Укажите марку товара');
-            return errors;
-        },
         unitsErrors: function unitsErrors() {
             var errors = [];
             if (!this.$v.units.$dirty) return errors;
@@ -69691,15 +69544,7 @@ var render = function() {
       }),
       _vm._v(" "),
       _c("v-text-field", {
-        attrs: { label: "Марка", "error-messages": _vm.tmErrors, required: "" },
-        on: {
-          input: function($event) {
-            _vm.$v.tm.$touch()
-          },
-          blur: function($event) {
-            _vm.$v.tm.$touch()
-          }
-        },
+        attrs: { label: "Марка" },
         model: {
           value: _vm.tm,
           callback: function($$v) {
@@ -69888,6 +69733,307 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-57fcf8f2", module.exports)
+  }
+}
+
+/***/ }),
+/* 144 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(145)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(147)
+/* template */
+var __vue_template__ = __webpack_require__(148)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\form\\CategoryForm.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {  return key !== "default" && key.substr(0, 2) !== "__"})) {  console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e4a6705a", Component.options)
+  } else {
+    hotAPI.reload("data-v-e4a6705a", Component.options)
+' + '  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(146);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("e33a6d14", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e4a6705a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./CategoryForm.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-e4a6705a\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./CategoryForm.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.btn-close{\n    cursor: pointer;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 147 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            dialog: false,
+            name: ''
+        };
+    },
+
+    methods: {
+        deleteCategory: function deleteCategory(item) {
+            var index = this.$store.getters.categories.indexOf(item);
+            this.$store.getters.categories.splice(index, 1);
+        },
+        save: function save() {
+            var _this = this;
+
+            axios.post('/category', {
+                name: this.name
+            }).then(function (response) {
+                _this.$store.dispatch('addCategory', { name: response.data.name, id: response.data.id });
+                _this.close();
+            }).catch(function (e) {
+                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
+        },
+        close: function close() {
+            this.dialog = false;
+        }
+    }
+});
+
+/***/ }),
+/* 148 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-layout",
+    [
+      _c(
+        "v-dialog",
+        {
+          attrs: { "max-width": "400px" },
+          model: {
+            value: _vm.dialog,
+            callback: function($$v) {
+              _vm.dialog = $$v
+            },
+            expression: "dialog"
+          }
+        },
+        [
+          _c(
+            "v-btn",
+            {
+              staticClass: "mx-0",
+              attrs: { slot: "activator", icon: "" },
+              slot: "activator"
+            },
+            [_c("v-icon", { attrs: { color: "pink" } }, [_vm._v("add")])],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-toolbar",
+                { attrs: { color: "purple", dark: "" } },
+                [
+                  _c("v-card-title", [
+                    _c("span", { staticClass: "headline" }, [
+                      _vm._v("Добавить категорию")
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    { attrs: { icon: "" }, on: { click: _vm.close } },
+                    [_c("v-icon", [_vm._v("close")])],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-text",
+                [
+                  _c(
+                    "v-container",
+                    { staticStyle: { width: "100%" } },
+                    [
+                      _c(
+                        "v-layout",
+                        { attrs: { wrap: "" } },
+                        [
+                          _c(
+                            "v-flex",
+                            [
+                              _c("v-text-field", {
+                                attrs: { label: "Название" },
+                                model: {
+                                  value: _vm.name,
+                                  callback: function($$v) {
+                                    _vm.name = $$v
+                                  },
+                                  expression: "name"
+                                }
+                              })
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { color: "blue darken-1", flat: "" },
+                      nativeOn: {
+                        click: function($event) {
+                          _vm.save($event)
+                        }
+                      }
+                    },
+                    [_vm._v("Сохранить")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-e4a6705a", module.exports)
   }
 }
 
