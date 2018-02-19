@@ -68515,6 +68515,7 @@ var render = function() {
                             _vm._v(" "),
                             _c(
                               "td",
+                              { staticClass: "text-xs-right" },
                               [
                                 _c(
                                   "v-btn",

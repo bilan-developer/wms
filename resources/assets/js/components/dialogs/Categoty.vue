@@ -37,7 +37,7 @@
                                     ></v-text-field>
                                 </v-edit-dialog>
                             </td>
-                            <td> <v-btn icon class="mx-0" @click="deleteCategory(props.item)">
+                            <td class="text-xs-right"> <v-btn icon class="mx-0" @click="deleteCategory(props.item)">
                                 <v-icon color="pink">delete</v-icon>
                             </v-btn></td>
                         </template>
