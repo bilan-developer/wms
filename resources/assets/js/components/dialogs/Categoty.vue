@@ -28,6 +28,7 @@
                                 > {{ props.item.name }}
                                     <v-text-field
                                             slot="input"
+                                            @blur="categoryUpdate(props.item)"
                                             label="Edit"
                                             v-model="props.item.name"
                                             single-line
@@ -84,6 +85,19 @@
                     this.$store.dispatch('successBlock', {text:"Категория удалена", time:1000});
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             },
+            categoryUpdate:function (item) {
+                axios.post('/category/' + item.id, {
+                    _method: 'PUT',
+                    name: item.name,
+                }).then(response => {
+                    const index = this.$store.getters.categories.indexOf(item);
+                    this.$store.getters.categories.splice(index, 1);
+
+                    this.$store.dispatch('addCategory', {name:item.name, id:item.id});
+                    this.$store.dispatch('successBlock', {text:"Категория изменина", time:1000});
+
+                }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});});
+            }
         },
     }
 </script>

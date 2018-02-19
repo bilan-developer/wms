@@ -68014,6 +68014,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -68055,6 +68056,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.$store.dispatch('successBlock', { text: "Категория удалена", time: 1000 });
             }).catch(function (e) {
                 _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
+        },
+        categoryUpdate: function categoryUpdate(item) {
+            var _this2 = this;
+
+            axios.post('/category/' + item.id, {
+                _method: 'PUT',
+                name: item.name
+            }).then(function (response) {
+                var index = _this2.$store.getters.categories.indexOf(item);
+                _this2.$store.getters.categories.splice(index, 1);
+
+                _this2.$store.dispatch('addCategory', { name: item.name, id: item.id });
+                _this2.$store.dispatch('successBlock', { text: "Категория изменина", time: 1000 });
+            }).catch(function (e) {
+                _this2.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
         }
     }
@@ -68474,6 +68491,11 @@ var render = function() {
                                         "single-line": "",
                                         counter: "",
                                         rules: [_vm.max25chars]
+                                      },
+                                      on: {
+                                        blur: function($event) {
+                                          _vm.categoryUpdate(props.item)
+                                        }
                                       },
                                       slot: "input",
                                       model: {
