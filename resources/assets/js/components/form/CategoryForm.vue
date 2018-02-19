@@ -50,6 +50,7 @@
                     name: this.name,
                 }).then(response => {
                     this.$store.dispatch('addCategory', {name:response.data.name, id:response.data.id});
+                    this.$store.dispatch('successBlock', {text:"Категория добавлена", time:1000});
                     this.close();
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             },

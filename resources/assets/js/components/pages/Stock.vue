@@ -2,13 +2,14 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="col-md-1 top-left-block">
-                    <product :type_btn='"add"' @updateTable="getProducts"></product>
+                <div class="btn-panel">
+                    <div class="top-left-block">
+                        <product :type_btn='"add"' @updateTable="getProducts"></product>
+                    </div>
+                    <div class="top-left-block">
+                        <categoty></categoty>
+                    </div>
                 </div>
-                <div class="col-md-1 top-left-block">
-                    <categoty></categoty>
-                </div>
-
                 <div class="col-md-7 col-md-offset-3">
                     <v-text-field
                             append-icon="search"
@@ -115,5 +116,9 @@
         width: 100px!important;
         margin:0!important;
         padding: 0!important;
+    }
+    .btn-panel div{
+        display: inline-block;
+        margin-right: 5px;
     }
 </style>

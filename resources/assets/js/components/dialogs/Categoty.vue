@@ -50,6 +50,7 @@
 <script>
     import categoryForm from '../form/CategoryForm.vue';
 
+
     export default {
         components: {
             categoryForm
