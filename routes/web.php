@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('/exmo', 'ExmoController@index');
+
 Route::resource('/product','ProductController');
 Route::resource('/purchase','PurchaseController');
 Route::resource('/category','CategoryController');

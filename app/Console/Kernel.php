@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\BTC_USD;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,8 +25,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->call(function () {
+            $url = 'https://api.exmo.com/v1/ticker/';
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $json = curl_exec($ch);
+            curl_close($ch);
+            $result = json_decode($json, true);
+
+            $btc_usd = new BTC_USD($result['BTC_USD']);
+            $btc_usd->save();
+        })->everyMinute();
     }
 
     /**
