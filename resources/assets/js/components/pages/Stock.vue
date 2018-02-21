@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="btn-panel">
+                <div class="btn-panel-stock">
                     <div class="top-left-block">
                         <product :type_btn='"add"' @updateTable="getProducts"></product>
                     </div>
@@ -10,7 +10,8 @@
                         <categoty></categoty>
                     </div>
                 </div>
-                <div class="col-md-7 col-md-offset-3">
+                <v-spacer></v-spacer>
+                <div class="col-md-7">
                     <v-text-field
                             append-icon="search"
                             label="Поиск..."
@@ -117,7 +118,7 @@
         margin:0!important;
         padding: 0!important;
     }
-    .btn-panel div{
+    .btn-panel-stock div{
         display: inline-block;
         margin-right: 5px;
     }

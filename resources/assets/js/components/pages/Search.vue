@@ -2,10 +2,11 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="col-md-2">
+                <div>
                     <basket @updateTable="getProducts"></basket>
                 </div>
-                <div class="col-md-7 col-md-offset-3">
+                <v-spacer></v-spacer>
+                <div class="col-md-7">
                     <v-text-field
                             append-icon="search"
                             label="Поиск..."

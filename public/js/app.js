@@ -547,6 +547,88 @@ module.exports = {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -763,88 +845,6 @@ function applyToTag (styleElement, obj) {
     }
     styleElement.appendChild(document.createTextNode(css))
   }
-}
-
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-/*
-	MIT License http://www.opensource.org/licenses/mit-license.php
-	Author Tobias Koppers @sokra
-*/
-// css base code, injected by the css-loader
-module.exports = function(useSourceMap) {
-	var list = [];
-
-	// return the list of modules as css string
-	list.toString = function toString() {
-		return this.map(function (item) {
-			var content = cssWithMappingToString(item, useSourceMap);
-			if(item[2]) {
-				return "@media " + item[2] + "{" + content + "}";
-			} else {
-				return content;
-			}
-		}).join("");
-	};
-
-	// import a list of modules into the list
-	list.i = function(modules, mediaQuery) {
-		if(typeof modules === "string")
-			modules = [[null, modules, ""]];
-		var alreadyImportedModules = {};
-		for(var i = 0; i < this.length; i++) {
-			var id = this[i][0];
-			if(typeof id === "number")
-				alreadyImportedModules[id] = true;
-		}
-		for(i = 0; i < modules.length; i++) {
-			var item = modules[i];
-			// skip already imported module
-			// this implementation is not 100% perfect for weird media query combinations
-			//  when a module is imported multiple times with different media queries.
-			//  I hope this will never occur (Hey this way we have smaller bundles)
-			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
-				if(mediaQuery && !item[2]) {
-					item[2] = mediaQuery;
-				} else if(mediaQuery) {
-					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
-				}
-				list.push(item);
-			}
-		}
-	};
-	return list;
-};
-
-function cssWithMappingToString(item, useSourceMap) {
-	var content = item[1] || '';
-	var cssMapping = item[3];
-	if (!cssMapping) {
-		return content;
-	}
-
-	if (useSourceMap && typeof btoa === 'function') {
-		var sourceMapping = toComment(cssMapping);
-		var sourceURLs = cssMapping.sources.map(function (source) {
-			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
-		});
-
-		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
-	}
-
-	return [content].join('\n');
-}
-
-// Adapted from convert-source-map (MIT)
-function toComment(sourceMap) {
-	// eslint-disable-next-line no-undef
-	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
-	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
-
-	return '/*# ' + data + ' */';
 }
 
 
@@ -64039,7 +64039,7 @@ var content = __webpack_require__(49);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("4d638f98", content, false);
+var update = __webpack_require__(4)("4d638f98", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -64058,7 +64058,7 @@ if(false) {
 /* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -64333,7 +64333,7 @@ var content = __webpack_require__(54);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("0e7dc8ba", content, false);
+var update = __webpack_require__(4)("0e7dc8ba", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -64352,7 +64352,7 @@ if(false) {
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -64372,6 +64372,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dialogs_addProductBasket_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dialogs_addProductBasket_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dialogs_Basket_vue__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dialogs_Basket_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dialogs_Basket_vue__);
+//
 //
 //
 //
@@ -65063,7 +65064,7 @@ var content = __webpack_require__(61);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("65aef532", content, false);
+var update = __webpack_require__(4)("65aef532", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -65082,12 +65083,12 @@ if(false) {
 /* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n.basket{\n    margin-top: 10px;\n    margin-left: 25px;\n    cursor: pointer;\n}\n.amount{\n    padding: 0 25px 15px 0;\n    text-align: right;\n}\n", ""]);
+exports.push([module.i, "\n.basket{\n    margin-top: 10px;\n    margin-left: 25px;\n    cursor: pointer;\n}\n.amount{\n    text-align: right;\n    margin-right: 25px;\n}\n.btn-panel{\n    text-align: right;\n    position: absolute;\n    bottom: 26px;\n    right: 5px;\n}\n.coment-field{\n    margin-left: 25px;\n}\n", ""]);
 
 // exports
 
@@ -65143,11 +65144,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
+            comment: '',
             btnPay: false,
             amount: 0,
             dialog: false,
@@ -65173,7 +65194,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
 
         /**
-         * Сохраняем позицию в корзине
+         * Покупка.
          */
         pay: function pay() {
             var _this = this;
@@ -65187,9 +65208,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             axios.post('/pay', {
-                data: { positions: positions, amount: this.amount }
+                data: { positions: positions, amount: this.amount, comment: this.comment }
             }).then(function (response) {
-                console.log(response);
                 if (response.data.status === 'ok') {
                     _this.$store.dispatch('successBlock', { text: "Оплаченно", time: 1000 });
                     _this.clearBasket(false);
@@ -65222,6 +65242,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          */
         clearBasket: function clearBasket(message) {
             this.$store.dispatch('clearBasket');
+            this.comment = '';
             this.btnPay = true;
 
             if (message) {
@@ -65335,7 +65356,25 @@ var render = function() {
               _c(
                 "v-toolbar",
                 { attrs: { color: "indigo", dark: "" } },
-                [_c("v-toolbar-title", [_vm._v("Корзина")])],
+                [
+                  _c("v-toolbar-title", [_vm._v("Корзина")]),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { icon: "" },
+                      on: {
+                        click: function($event) {
+                          _vm.dialog = false
+                        }
+                      }
+                    },
+                    [_c("v-icon", [_vm._v("close")])],
+                    1
+                  )
+                ],
                 1
               ),
               _vm._v(" "),
@@ -65389,50 +65428,88 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  directives: [
+                { staticClass: "amount" },
+                [
+                  _c(
+                    "v-chip",
                     {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.amount,
-                      expression: "amount"
-                    }
-                  ],
-                  staticClass: "amount"
-                },
-                [_c("span", [_vm._v("Всего: " + _vm._s(_vm.amount) + " ")])]
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.amount,
+                          expression: "amount"
+                        }
+                      ],
+                      attrs: { label: "", outline: "", color: "primary" }
+                    },
+                    [_vm._v("Всего: " + _vm._s(_vm.amount) + " грн.")]
+                  )
+                ],
+                1
               ),
               _vm._v(" "),
               _c(
                 "v-card-actions",
                 [
-                  _c("v-spacer"),
-                  _vm._v(" "),
                   _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "blue darken-1", flat: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog = false
+                    "v-flex",
+                    { staticClass: "coment-field", attrs: { xs6: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          disabled: _vm.btnPay,
+                          name: "comment",
+                          label: "Коментарий",
+                          "multi-line": "",
+                          rows: "2"
+                        },
+                        model: {
+                          value: _vm.comment,
+                          callback: function($$v) {
+                            _vm.comment = $$v
+                          },
+                          expression: "comment"
                         }
-                      }
-                    },
-                    [_vm._v("Закрыть")]
+                      })
+                    ],
+                    1
                   ),
                   _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: {
-                        color: "blue darken-1",
-                        flat: "",
-                        disabled: _vm.btnPay
-                      },
-                      on: { click: _vm.pay }
-                    },
-                    [_vm._v("Оплаченно")]
-                  )
+                  _c("v-flex", { attrs: { xs6: "" } }, [
+                    _c(
+                      "div",
+                      { staticClass: "btn-panel" },
+                      [
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: {
+                              color: "blue darken-1",
+                              flat: "",
+                              disabled: _vm.btnPay
+                            },
+                            on: { click: _vm.pay }
+                          },
+                          [_vm._v("Списание")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "v-btn",
+                          {
+                            attrs: {
+                              color: "blue darken-1",
+                              flat: "",
+                              disabled: _vm.btnPay
+                            },
+                            on: { click: _vm.pay }
+                          },
+                          [_vm._v("Оплаченно")]
+                        )
+                      ],
+                      1
+                    )
+                  ])
                 ],
                 1
               )
@@ -65472,37 +65549,42 @@ var render = function() {
         "div",
         { staticClass: "col-md-12" },
         [
-          _c("v-card-title", [
-            _c(
-              "div",
-              { staticClass: "col-md-2" },
-              [_c("basket", { on: { updateTable: _vm.getProducts } })],
-              1
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "col-md-7 col-md-offset-3" },
-              [
-                _c("v-text-field", {
-                  attrs: {
-                    "append-icon": "search",
-                    label: "Поиск...",
-                    "single-line": "",
-                    "hide-details": ""
-                  },
-                  model: {
-                    value: _vm.search,
-                    callback: function($$v) {
-                      _vm.search = $$v
+          _c(
+            "v-card-title",
+            [
+              _c(
+                "div",
+                [_c("basket", { on: { updateTable: _vm.getProducts } })],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-md-7" },
+                [
+                  _c("v-text-field", {
+                    attrs: {
+                      "append-icon": "search",
+                      label: "Поиск...",
+                      "single-line": "",
+                      "hide-details": ""
                     },
-                    expression: "search"
-                  }
-                })
-              ],
-              1
-            )
-          ])
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -65657,7 +65739,7 @@ var content = __webpack_require__(67);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("70bdd608", content, false);
+var update = __webpack_require__(4)("70bdd608", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -65676,12 +65758,12 @@ if(false) {
 /* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n.pagination__more{\n    display: none;\n}\ntr .btn-column{\n    width: 100px!important;\n    margin:0!important;\n    padding: 0!important;\n}\n.btn-panel div{\n    display: inline-block;\n    margin-right: 5px;\n}\n", ""]);
+exports.push([module.i, "\n.pagination__more{\n    display: none;\n}\ntr .btn-column{\n    width: 100px!important;\n    margin:0!important;\n    padding: 0!important;\n}\n.btn-panel-stock div{\n    display: inline-block;\n    margin-right: 5px;\n}\n", ""]);
 
 // exports
 
@@ -65696,6 +65778,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dialogs_Product_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__dialogs_Product_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dialogs_Categoty_vue__ = __webpack_require__(99);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__dialogs_Categoty_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__dialogs_Categoty_vue__);
+//
 //
 //
 //
@@ -65876,7 +65959,7 @@ var content = __webpack_require__(71);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("4f22095d", content, false);
+var update = __webpack_require__(4)("4f22095d", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -65895,7 +65978,7 @@ if(false) {
 /* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -66053,6 +66136,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuelidate_lib_validators__);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
 //
 //
 //
@@ -67657,7 +67741,8 @@ var render = function() {
           multiple: "",
           chips: "",
           "max-height": "auto",
-          autocomplete: ""
+          autocomplete: "",
+          color: "pink"
         },
         scopedSlots: _vm._u([
           {
@@ -67669,12 +67754,7 @@ var render = function() {
                   {
                     key: JSON.stringify(data.item),
                     staticClass: "chip--select-multi",
-                    attrs: {
-                      close: "",
-                      outline: "",
-                      label: "",
-                      color: "primary"
-                    },
+                    attrs: { close: "", outline: "", label: "", color: "pink" },
                     on: {
                       input: function($event) {
                         data.parent.selectItem(data.item)
@@ -67928,7 +68008,7 @@ var content = __webpack_require__(101);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("2970c046", content, false);
+var update = __webpack_require__(4)("2970c046", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -67947,7 +68027,7 @@ if(false) {
 /* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -68140,7 +68220,7 @@ var content = __webpack_require__(105);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("e33a6d14", content, false);
+var update = __webpack_require__(4)("e33a6d14", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -68159,7 +68239,7 @@ if(false) {
 /* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -68582,46 +68662,57 @@ var render = function() {
         "div",
         { staticClass: "col-md-12" },
         [
-          _c("v-card-title", [
-            _c("div", { staticClass: "btn-panel" }, [
+          _c(
+            "v-card-title",
+            [
+              _c("div", { staticClass: "btn-panel-stock" }, [
+                _c(
+                  "div",
+                  { staticClass: "top-left-block" },
+                  [
+                    _c("product", {
+                      attrs: { type_btn: "add" },
+                      on: { updateTable: _vm.getProducts }
+                    })
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "top-left-block" },
+                  [_c("categoty")],
+                  1
+                )
+              ]),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
               _c(
                 "div",
-                { staticClass: "top-left-block" },
+                { staticClass: "col-md-7" },
                 [
-                  _c("product", {
-                    attrs: { type_btn: "add" },
-                    on: { updateTable: _vm.getProducts }
+                  _c("v-text-field", {
+                    attrs: {
+                      "append-icon": "search",
+                      label: "Поиск...",
+                      "single-line": "",
+                      "hide-details": ""
+                    },
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
                   })
                 ],
                 1
-              ),
-              _vm._v(" "),
-              _c("div", { staticClass: "top-left-block" }, [_c("categoty")], 1)
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "col-md-7 col-md-offset-3" },
-              [
-                _c("v-text-field", {
-                  attrs: {
-                    "append-icon": "search",
-                    label: "Поиск...",
-                    "single-line": "",
-                    "hide-details": ""
-                  },
-                  model: {
-                    value: _vm.search,
-                    callback: function($$v) {
-                      _vm.search = $$v
-                    },
-                    expression: "search"
-                  }
-                })
-              ],
-              1
-            )
-          ])
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -68928,7 +69019,7 @@ var content = __webpack_require__(115);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("b5917144", content, false);
+var update = __webpack_require__(4)("b5917144", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -68947,12 +69038,12 @@ if(false) {
 /* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "\n.pagination__more{\n    display: none;\n}\n.sales-amount{\n    padding: 15px 0 15px 15px;\n}\n.sales-amount span span{\n    cursor:pointer!important;\n}\n\n", ""]);
+exports.push([module.i, "\n.pagination__more{\n    display: none;\n}\n.sales-amount{\n    text-align: right;\n}\n.sales-amount span span{\n    cursor:pointer!important;\n}\n\n", ""]);
 
 // exports
 
@@ -68998,6 +69089,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -69007,8 +69119,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
+            search: '',
             salesAmount: 0,
-            noResultsText: 'Такого товара нет',
+            noResultsText: 'Информация не найдена',
             pagination: { rowsPerPage: 10, page: 1 },
             tableHeaders: [],
             tableItems: []
@@ -69097,7 +69210,7 @@ var content = __webpack_require__(119);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("de1ac37e", content, false);
+var update = __webpack_require__(4)("de1ac37e", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -69116,7 +69229,7 @@ if(false) {
 /* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -69355,27 +69468,53 @@ var render = function() {
         "div",
         { staticClass: "col-md-12" },
         [
-          _c("v-card-title", [
-            _c(
-              "div",
-              { staticClass: "col-md-1 col-md-offset-10 sales-amount" },
-              [
-                _c(
-                  "v-chip",
-                  {
-                    attrs: { color: "green", block: "", "text-color": "white" }
-                  },
-                  [
-                    _vm._v("Продаж на " + _vm._s(_vm.salesAmount) + " грн. "),
-                    _c("i", { staticClass: "material-icons" }, [
-                      _vm._v("account_balance_wallet")
-                    ])
-                  ]
-                )
-              ],
-              1
-            )
-          ])
+          _c(
+            "v-card-title",
+            [
+              _c(
+                "div",
+                [
+                  _c(
+                    "v-chip",
+                    { attrs: { color: "primary", label: "", outline: "" } },
+                    [
+                      _vm._v("Продаж на " + _vm._s(_vm.salesAmount) + " грн. "),
+                      _c("i", { staticClass: "material-icons" }, [
+                        _vm._v("account_balance_wallet")
+                      ])
+                    ]
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-spacer"),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-md-7" },
+                [
+                  _c("v-text-field", {
+                    attrs: {
+                      "append-icon": "search",
+                      label: "Поиск...",
+                      "single-line": "",
+                      "hide-details": ""
+                    },
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -69387,6 +69526,7 @@ var render = function() {
           items: _vm.tableItems,
           pagination: _vm.pagination,
           "no-results-text": _vm.noResultsText,
+          search: _vm.search,
           "hide-actions": ""
         },
         on: {
@@ -69643,7 +69783,7 @@ var content = __webpack_require__(128);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("5bc731dd", content, false);
+var update = __webpack_require__(4)("5bc731dd", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -69662,7 +69802,7 @@ if(false) {
 /* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(4)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 

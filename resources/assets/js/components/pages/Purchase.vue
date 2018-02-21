@@ -2,16 +2,37 @@
     <div class="col-md-12">
         <div class="col-md-12">
             <v-card-title>
-                <div class="col-md-1 col-md-offset-10 sales-amount">
-                    <v-chip color="green" block text-color="white">Продаж на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                <div>
+                    <v-chip color="primary" label outline>Продаж на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                </div>
+                <v-spacer></v-spacer>
+                <div class="col-md-7">
+                    <v-text-field
+                            append-icon="search"
+                            label="Поиск..."
+                            single-line
+                            hide-details
+                            v-model="search"
+                    ></v-text-field>
                 </div>
             </v-card-title>
+            <!--<v-card-title>-->
+                <!--<v-container grid-list-xl text-xs-center>-->
+                    <!--<v-layout row wrap>-->
+                        <!--<v-flex xs2 offset-xs10>-->
+                        <!--</v-flex>-->
+                    <!--</v-layout>-->
+                <!--</v-container>-->
+                <!--&lt;!&ndash;<div class="sales-amount">&ndash;&gt;-->
+                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--</v-card-title>-->
         </div>
         <v-data-table
                 v-bind:headers="tableHeaders"
                 v-bind:items="tableItems"
                 v-bind:pagination.sync="pagination"
                 v-bind:no-results-text="noResultsText"
+                :search="search"
                 hide-actions
                 class="elevation-1"
         >
@@ -40,8 +61,9 @@
         },
         data () {
             return {
+                search: '',
                 salesAmount: 0,
-                noResultsText: 'Такого товара нет',
+                noResultsText: 'Информация не найдена',
                 pagination: {rowsPerPage: 10, page: 1},
                 tableHeaders: [],
                 tableItems: []
@@ -71,7 +93,7 @@
         display: none;
     }
     .sales-amount{
-        padding: 15px 0 15px 15px;
+        text-align: right;
     }
     .sales-amount span span{
         cursor:pointer!important;

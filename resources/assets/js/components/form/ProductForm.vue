@@ -58,6 +58,7 @@
                 chips
                 max-height="auto"
                 autocomplete
+                color="pink"
         >
 
             <template slot="selection" slot-scope="data">
@@ -65,7 +66,7 @@
                         close
                         outline
                         label
-                        color="primary"
+                        color="pink"
                         @input="data.parent.selectItem(data.item)"
                         class="chip--select-multi"
                         :key="JSON.stringify(data.item)"

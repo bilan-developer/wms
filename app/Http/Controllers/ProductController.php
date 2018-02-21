@@ -20,7 +20,8 @@ class ProductController extends Controller
     {
         $post = current($request->toArray());
         $purchase = new Purchase(array(
-            'amount' => $post['amount']
+            'amount' => $post['amount'],
+            'comment' => $post['comment'],
         ));
         $purchase->save();
 

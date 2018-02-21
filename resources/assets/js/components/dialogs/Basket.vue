@@ -13,6 +13,10 @@
             <v-card>
                 <v-toolbar color="indigo" dark>
                     <v-toolbar-title>Корзина</v-toolbar-title>
+                    <v-spacer></v-spacer>
+                    <v-btn  v-on:click="dialog=false" icon>
+                        <v-icon>close</v-icon>
+                    </v-btn>
                 </v-toolbar>
                 <v-card-text>
                     <v-data-table
@@ -32,11 +36,26 @@
                         </template>
                     </v-data-table>
                 </v-card-text>
-                <div v-show="amount" class="amount"><span>Всего: {{ amount }} </span></div>
+                <div class="amount">
+                    <v-chip v-show="amount"  label outline color="primary">Всего: {{ amount }} грн.</v-chip>
+                </div>
                 <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click="dialog=false">Закрыть</v-btn>
-                    <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Оплаченно</v-btn>
+                    <v-flex xs6 class="coment-field">
+                        <v-text-field
+                                v-model="comment"
+                                :disabled="btnPay"
+                                name="comment"
+                                label="Коментарий"
+                                multi-line
+                                rows="2"
+                        ></v-text-field>
+                    </v-flex>
+                    <v-flex xs6>
+                        <div class="btn-panel">
+                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Списание</v-btn>
+                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Оплаченно</v-btn>
+                        </div>
+                    </v-flex>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -47,6 +66,7 @@
 
     export default {
         data: () => ({
+            comment: '',
             btnPay:false,
             amount: 0,
             dialog: false,
@@ -80,7 +100,7 @@
             },
 
             /**
-             * Сохраняем позицию в корзине
+             * Покупка.
              */
             pay: function () {
                 let positions = this.getIdNumber();
@@ -92,9 +112,8 @@
                 }
 
                 axios.post(`/pay`, {
-                    data: {positions: positions, amount: this.amount}
+                    data: {positions: positions, amount: this.amount, comment: this.comment}
                 }).then(response => {
-                    console.log(response);
                         if(response.data.status === 'ok'){
                             this.$store.dispatch('successBlock', {text:"Оплаченно", time:1000});
                             this.clearBasket(false);
@@ -128,6 +147,7 @@
              */
             clearBasket: function(message) {
                 this.$store.dispatch('clearBasket');
+                this.comment = '';
                 this.btnPay = true;
 
                 if(message){
@@ -173,7 +193,16 @@
         cursor: pointer;
     }
     .amount{
-        padding: 0 25px 15px 0;
         text-align: right;
+        margin-right: 25px;
+    }
+    .btn-panel{
+        text-align: right;
+        position: absolute;
+        bottom: 26px;
+        right: 5px;
+    }
+    .coment-field{
+        margin-left: 25px;
     }
 </style>
