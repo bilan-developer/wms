@@ -37,7 +37,11 @@
 
     export default {
         props: {
-            id: Number
+            id: Number,
+            url: {
+                type: String,
+                default: '/show-purchase/'
+            }
         },
         data: () => ({
             amount: 0,
@@ -58,7 +62,7 @@
              * Получаем список товаров с покупки
              */
             show: function() {
-                let uri = '/purchase/' + this.id;
+                let uri = this.url + this.id;
                 Axios.get(uri).then((response) => {
                     this.tableHeaders = response.data.headers;
                     this.tableItems   = response.data.items;

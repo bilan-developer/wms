@@ -95,11 +95,12 @@
             </div>
         </v-toolbar>
         <v-content>
-                <search  v-if="toggle === 'search'"></search>
-                <stock   v-if="toggle === 'stock'"></stock>
-                <report  v-if="toggle === 'report'"></report>
-                <purchase  v-if="toggle === 'purchase'"></purchase>
-            </v-content>
+            <search     v-if="toggle === 'search'"></search>
+            <stock      v-if="toggle === 'stock'"></stock>
+            <report     v-if="toggle === 'report'"></report>
+            <purchase   v-if="toggle === 'purchase'"></purchase>
+            <write-off  v-if="toggle === 'writeOff'"></write-off>
+        </v-content>
     </v-app>
 </template>
 
@@ -108,6 +109,7 @@
     import stock  from './pages/Stock';
     import report from './pages/Report';
     import purchase from './pages/Purchase';
+    import writeOff from './pages/WriteOff';
     import toasts from './dialogs/Toasts.vue';
     import progressCircular from './apps/Progress.vue';
 
@@ -122,6 +124,7 @@
             stock,
             report,
             purchase,
+            writeOff,
             toasts,
             progressCircular
         },
@@ -133,6 +136,8 @@
                 { icon: 'home', text: 'Склад', comp: 'stock' },
                 { icon: 'content_copy', text: 'Отчёты', comp: 'report' },
                 { icon: 'shopping_basket', text: 'Покупки', comp: 'purchase' },
+                { icon: 'remove_shopping_cart', text: 'Списание', comp: 'writeOff' },
+
             ],
             rightMenu: [
                 { title : 'Настройки',  method: "" },

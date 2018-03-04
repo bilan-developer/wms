@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Purchase extends Model
+class Marriage extends Model
 {
-    protected $table = 'purchases';
+    protected $table = 'marriage';
     protected $fillable = [
         'id',
         'comment',
@@ -21,14 +21,14 @@ class Purchase extends Model
      */
     public static function saveData($post)
     {
-        $purchase = new Purchase([
+        $marriage = new Marriage([
             'amount' => $post['amount'],
             'comment' => $post['comment'],
         ]);
 
-        $purchase->save();
+        $marriage->save();
 
-        $purchasesProduct = new PurchasesProduct();
-        $purchasesProduct->savePurchases($post['positions'], $purchase->id);
+        $marriageProduct = new MarriageProduct();
+        $marriageProduct->saveMarriage($post['positions'], $marriage->id);
     }
 }

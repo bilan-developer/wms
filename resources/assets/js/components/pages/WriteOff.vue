@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <v-card-title>
                 <div>
-                    <v-chip color="primary" label outline>Продаж на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                    <v-chip color="primary" label outline>Списаний на {{ salesAmount }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
                 </div>
                 <v-spacer></v-spacer>
                 <div class="col-md-7">
@@ -32,7 +32,7 @@
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="col-md-2 text-xs-center">{{ props.item.amount }}</td>
                 <td class="col-md-1 text-xs-right">
-                    <show-purchase :id="props.item.id" :url=url></show-purchase>
+                    <show-purchase :id="props.item.id" :url="url"></show-purchase>
                 </td>
             </template>
         </v-data-table>
@@ -57,12 +57,12 @@
                 pagination: {rowsPerPage: 10, page: 1},
                 tableHeaders: [],
                 tableItems: [],
-                url: "/show-purchase/"
+                url: "/show-write-off/"
             }
         },
         created: function(){
-            let uri = '/purchase';
-            Axios.get(uri).then((response) => {
+            let url = '/write-off-list';
+            Axios.get(url).then((response) => {
                 this.tableHeaders = response.data.headers;
                 this.tableItems   = response.data.items;
                 this.salesAmount  = response.data.salesAmount;
@@ -77,6 +77,7 @@
         methods: {
 
         }
+
     }
 </script>
 <style>

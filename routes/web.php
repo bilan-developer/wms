@@ -16,7 +16,6 @@ Route::get('/candles ', 'ExmoController@candles');
 Route::get('/exmo-show', 'ExmoController@index');
 
 Route::resource('/product','ProductController');
-Route::resource('/purchase','PurchaseController');
 Route::resource('/category','CategoryController');
 Auth::routes();
 
@@ -27,7 +26,15 @@ Route::get('/logout', function () {
     Auth::logout();
 });
 
-Route::post('pay', 'ProductController@pay');
+Route::post('/write-off', 'ProductController@writeOff');
+Route::get('/write-off-list', 'ProductController@writeOffList');
+Route::get('/show-write-off/{id}', 'ProductController@showWriteOff');
+Route::get('/show-purchase/{id}', 'ProductController@showPurchase');
+Route::get('/purchase', 'ProductController@purchase');
+
+
+Route::get('/balance', 'ReportController@balance');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/get-user', function () {

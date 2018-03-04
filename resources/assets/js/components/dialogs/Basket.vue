@@ -18,7 +18,7 @@
                         <v-icon>close</v-icon>
                     </v-btn>
                 </v-toolbar>
-                <v-card-text>
+                <v-card-text class="card-text-basket">
                     <v-data-table
                             :headers="headers"
                             :items="items"
@@ -35,10 +35,11 @@
                                 <td class="text-xs-center">{{ props.item.amount }}</td>
                         </template>
                     </v-data-table>
+                    <div class="amount">
+                        <v-chip v-show="amount"  label outline color="primary">Всего: {{ amount }} грн.</v-chip>
+                    </div>
                 </v-card-text>
-                <div class="amount">
-                    <v-chip v-show="amount"  label outline color="primary">Всего: {{ amount }} грн.</v-chip>
-                </div>
+
                 <v-card-actions>
                     <v-flex xs6 class="coment-field">
                         <v-text-field
@@ -52,8 +53,8 @@
                     </v-flex>
                     <v-flex xs6>
                         <div class="btn-panel">
-                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Списание</v-btn>
-                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="pay">Оплаченно</v-btn>
+                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="writeOff('write-off')">Списание</v-btn>
+                            <v-btn color="blue darken-1" flat :disabled="btnPay" @click="writeOff('bay')">Оплаченно</v-btn>
                         </div>
                     </v-flex>
                 </v-card-actions>
@@ -100,9 +101,9 @@
             },
 
             /**
-             * Покупка.
+             * Списание || Покупка.
              */
-            pay: function () {
+            writeOff: function (operation) {
                 let positions = this.getIdNumber();
                 this.btnPay = true;
 
@@ -111,11 +112,12 @@
                     return false
                 }
 
-                axios.post(`/pay`, {
-                    data: {positions: positions, amount: this.amount, comment: this.comment}
+                axios.post('/write-off', {
+                    data: {operation: operation,positions: positions, amount: this.amount, comment: this.comment}
                 }).then(response => {
                         if(response.data.status === 'ok'){
-                            this.$store.dispatch('successBlock', {text:"Оплаченно", time:1000});
+                            let message = (operation === 'bay') ? 'Оплаченно' : 'Списано';
+                            this.$store.dispatch('successBlock', {text: message, time:1000});
                             this.clearBasket(false);
                             this.$emit('updateTable');
                         }else{
@@ -194,7 +196,6 @@
     }
     .amount{
         text-align: right;
-        margin-right: 25px;
     }
     .btn-panel{
         text-align: right;
@@ -204,5 +205,8 @@
     }
     .coment-field{
         margin-left: 25px;
+    }
+    .card-text-basket{
+        padding-bottom: 0;
     }
 </style>

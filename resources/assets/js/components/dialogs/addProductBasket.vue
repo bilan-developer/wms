@@ -1,7 +1,7 @@
 <template>
     <v-layout row justify-right>
         <v-dialog v-model="dialog" persistent max-width="700px">
-            <v-btn color="primary" dark  slot="activator" v-on:click="getProduct">Добавить</v-btn>
+            <v-btn color="primary" dark  slot="activator" v-on:click="getProduct"><i class="material-icons">add</i></v-btn>
             <v-card>
                 <v-toolbar color="indigo" dark>
                     <v-toolbar-title>{{ product.name }}</v-toolbar-title>
