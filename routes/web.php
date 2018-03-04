@@ -35,6 +35,8 @@ Route::get('/purchase', 'ProductController@purchase');
 
 Route::get('/balance', 'ReportController@balance');
 
+Route::get('/course', 'AdapterController@course');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/get-user', function () {

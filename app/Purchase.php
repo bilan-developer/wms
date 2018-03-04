@@ -31,4 +31,15 @@ class Purchase extends Model
         $purchasesProduct = new PurchasesProduct();
         $purchasesProduct->savePurchases($post['positions'], $purchase->id);
     }
+
+    /**
+     * Общая сумма продаж товара.
+     *
+     * @return int
+     */
+    public static function salesAmount()
+    {
+        $data = Purchase::all(['amount'])->toArray();
+        return array_sum(array_column($data, 'amount'));
+    }
 }

@@ -68916,6 +68916,10 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(146)
+}
 var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(112)
@@ -68924,7 +68928,7 @@ var __vue_template__ = __webpack_require__(113)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -68978,8 +68982,65 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            balance: '',
+            salesAmount: '',
+            marriageAmount: '',
+            course: [{
+                ccy: '',
+                base_ccy: '',
+                buy: '',
+                sale: ''
+            }]
+        };
+    },
+
+    created: function created() {
+        this.getBalance();
+        this.getCourse();
+    },
+    methods: {
+        getBalance: function getBalance() {
+            var _this = this;
+
+            var vueObject = this;
+            var uri = '/balance';
+            Axios.get(uri).then(function (response) {
+                var data = response.data;
+                vueObject.balance = data.balance;
+                vueObject.salesAmount = data.salesAmount;
+                vueObject.marriageAmount = data.marriageAmount;
+            }).catch(function (e) {
+                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
+        },
+
+        getCourse: function getCourse() {
+            var _this2 = this;
+
+            var vueObject = this;
+            Axios.get('/course').then(function (response) {
+                vueObject.course = response.data;
+                console.log(response);
+            }).catch(function (e) {
+                _this2.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
+        }
+    }
+});
 
 /***/ }),
 /* 113 */
@@ -68989,30 +69050,93 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "v-toolbar",
-    [
-      _c("v-toolbar-title", [_vm._v("Отчёты")]),
-      _vm._v(" "),
-      _c("v-spacer"),
-      _vm._v(" "),
-      _c("v-toolbar-side-icon", { staticClass: "hidden-md-and-up" }),
-      _vm._v(" "),
-      _c(
-        "v-toolbar-items",
-        { staticClass: "hidden-sm-and-down" },
-        [
-          _c("v-btn", { attrs: { flat: "" } }, [_vm._v("Link One")]),
+  return _c("div", { staticClass: "col-md-12" }, [
+    _c(
+      "div",
+      { staticClass: "col-md-12" },
+      [
+        _c("v-card-title", [
+          _c(
+            "div",
+            { staticClass: "col-md-12" },
+            [
+              _c(
+                "v-chip",
+                { attrs: { color: "primary", label: "", outline: "" } },
+                [
+                  _vm._v(
+                    "Остаток на складе на " + _vm._s(_vm.balance) + " грн. "
+                  ),
+                  _c("i", { staticClass: "material-icons" }, [
+                    _vm._v("account_balance_wallet")
+                  ])
+                ]
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { flat: "" } }, [_vm._v("Link Two")]),
+          _c(
+            "div",
+            { staticClass: "col-md-12" },
+            [
+              _c(
+                "v-chip",
+                { attrs: { color: "primary", label: "", outline: "" } },
+                [
+                  _vm._v("Продаж на " + _vm._s(_vm.salesAmount) + " грн. "),
+                  _c("i", { staticClass: "material-icons" }, [
+                    _vm._v("account_balance_wallet")
+                  ])
+                ]
+              )
+            ],
+            1
+          ),
           _vm._v(" "),
-          _c("v-btn", { attrs: { flat: "" } }, [_vm._v("Link Three")])
-        ],
-        1
-      )
-    ],
-    1
-  )
+          _c(
+            "div",
+            { staticClass: "col-md-12" },
+            [
+              _c(
+                "v-chip",
+                { attrs: { color: "primary", label: "", outline: "" } },
+                [
+                  _vm._v(
+                    "Списаний на " + _vm._s(_vm.marriageAmount) + " грн. "
+                  ),
+                  _c("i", { staticClass: "material-icons" }, [
+                    _vm._v("account_balance_wallet")
+                  ])
+                ]
+              )
+            ],
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          _vm._l(_vm.course, function(value) {
+            return _c("p", [
+              _vm._v(
+                "\n                " +
+                  _vm._s(value.base_ccy) +
+                  " / " +
+                  _vm._s(value.ccy) +
+                  " " +
+                  _vm._s(value.buy) +
+                  " - " +
+                  _vm._s(value.sale) +
+                  "\n            "
+              )
+            ])
+          })
+        )
+      ],
+      1
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -70529,6 +70653,55 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 137 */,
+/* 138 */,
+/* 139 */,
+/* 140 */,
+/* 141 */,
+/* 142 */,
+/* 143 */,
+/* 144 */,
+/* 145 */,
+/* 146 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(147);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("23cfaa32", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1a08dd43\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Report.vue", function() {
+     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-1a08dd43\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0&bustCache!./Report.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 147 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "\n.sales-amount span span{\n    cursor:pointer!important;\n}\n\n", ""]);
+
+// exports
+
 
 /***/ })
 /******/ ]);

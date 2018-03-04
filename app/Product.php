@@ -34,7 +34,6 @@ class Product extends Model
         return $result;
     }
 
-
     /**
      * Обновляем количество продуктов оставшихся в магазине.
      *
@@ -64,4 +63,21 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Category', 'category_product', 'id_product', 'id_category');
     }
+
+    /**
+     * Общая сумма остатка товара.
+     *
+     * @return int
+     */
+    public static function balance()
+    {
+        $data = Product::all(['price', 'total'])->toArray();
+        $amount = 0;
+        foreach ($data as $value){
+            $amount += $value['price'] *  $value['total'];
+        }
+
+        return $amount;
+    }
+
 }

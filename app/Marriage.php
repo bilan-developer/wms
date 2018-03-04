@@ -31,4 +31,15 @@ class Marriage extends Model
         $marriageProduct = new MarriageProduct();
         $marriageProduct->saveMarriage($post['positions'], $marriage->id);
     }
+
+    /**
+     * Общая сумма списаний товара.
+     *
+     * @return int
+     */
+    public static function marriageAmount()
+    {
+        $data = Marriage::all(['amount'])->toArray();
+        return array_sum(array_column($data, 'amount'));
+    }
 }
