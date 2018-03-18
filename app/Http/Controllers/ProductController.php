@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\History;
 use App\Marriage;
 use App\MarriageProduct;
 use App\Product;
@@ -74,12 +75,13 @@ class ProductController extends Controller
      *
      * @param Product $product
      * @param  \Illuminate\Http\Request $request
+     * @param History $history
      */
-    public function store(Product $product, Request $request)
+    public function store(Product $product, Request $request, History $history)
     {
         $data = $request->toArray();
         $product = $product->create($data);
-
+        return $history->add($product);
         foreach ($data['categories'] as $category){
             $product->categories()->attach(['id_category' => $category]);
         }
@@ -115,14 +117,28 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request $request
      * @param  int $id
+     * @param History $history
      *
      * @return string
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, History $history)
     {
         $data = $request->toArray();
         $product = Product::find($id);
+
+        $numberTo = $product->total;
+        $numberFrom = $data['total'];
+
         $product->update($data);
+
+        if($numberTo > $numberFrom ){
+            $history->deleteProduct($product, $numberTo - $numberFrom);
+        }elseif ($numberTo < $numberFrom){
+            $history->edit($product, $numberFrom - $numberTo);
+        }
+
+
+
 
         $product->categories()->detach();
         foreach ($data['categories'] as $category){
@@ -140,7 +156,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
+        $history = new History();
         $product = Product::find($id);
+        $history->deleteProduct($product, $product->total);
         $product->categories()->detach();
         $product->delete();
     }

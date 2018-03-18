@@ -17,6 +17,7 @@ Route::get('/exmo-show', 'ExmoController@index');
 
 Route::resource('/product','ProductController');
 Route::resource('/category','CategoryController');
+Route::resource('/history','HistoryController');
 Auth::routes();
 
 Route::get('/', function () {
@@ -34,6 +35,7 @@ Route::get('/purchase', 'ProductController@purchase');
 
 
 Route::get('/balance', 'ReportController@balance');
+Route::get('/operations', 'OperationController@index');
 
 Route::get('/course', 'AdapterController@course');
 

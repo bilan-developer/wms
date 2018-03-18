@@ -29,7 +29,9 @@ class Marriage extends Model
         $marriage->save();
 
         $marriageProduct = new MarriageProduct();
+        $history = new History();
         $marriageProduct->saveMarriage($post['positions'], $marriage->id);
+        $history->writeOff($post['positions']);
     }
 
     /**

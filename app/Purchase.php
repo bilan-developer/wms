@@ -29,7 +29,9 @@ class Purchase extends Model
         $purchase->save();
 
         $purchasesProduct = new PurchasesProduct();
+        $history = new History();
         $purchasesProduct->savePurchases($post['positions'], $purchase->id);
+        $history->bay($post['positions']);
     }
 
     /**
