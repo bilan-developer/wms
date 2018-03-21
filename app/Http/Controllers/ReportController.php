@@ -11,9 +11,10 @@ class ReportController extends Controller
 {
     public function balance(){
         $balance = Product::balance();
-        $salesAmount = Purchase::salesAmount();
-        $marriageAmount = Marriage::marriageAmount();
+//        $salesAmount = Purchase::salesAmount();
+//        $marriageAmount = Marriage::marriageAmount();
 
-        return ['balance' => $balance, 'salesAmount' => $salesAmount, 'marriageAmount' => $marriageAmount];
+        return ['balance' => $balance];
+//        return ['balance' => $balance, 'salesAmount' => $salesAmount, 'marriageAmount' => $marriageAmount];
     }
 }

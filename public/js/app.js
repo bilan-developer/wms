@@ -65904,6 +65904,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -65921,12 +65925,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             noResultsText: 'Такого товара нет',
             pagination: { rowsPerPage: 10, page: 1 },
             tableHeaders: [],
-            tableItems: []
+            tableItems: [],
+            balance: 0
         };
     },
 
     created: function created() {
         this.getProducts();
+        this.getBalance();
         this.getCategories();
     },
 
@@ -65948,14 +65954,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
         },
+        getBalance: function getBalance() {
+            var _this2 = this;
+
+            var vueObject = this;
+            var uri = '/balance';
+            Axios.get(uri).then(function (response) {
+                var data = response.data;
+                vueObject.balance = data.balance;
+                //                    vueObject.salesAmount = data.salesAmount;
+                //                    vueObject.marriageAmount = data.marriageAmount;
+            }).catch(function (e) {
+                _this2.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+            });
+        },
 
         getProducts: function getProducts() {
-            var _this2 = this;
+            var _this3 = this;
 
             var uri = '/product';
             Axios.get(uri).then(function (response) {
-                _this2.tableHeaders = response.data.headers;
-                _this2.tableItems = response.data.items;
+                _this3.tableHeaders = response.data.headers;
+                _this3.tableItems = response.data.items;
             });
         },
         getCategories: function getCategories() {
@@ -68751,6 +68771,28 @@ var render = function() {
                   { staticClass: "top-left-block" },
                   [_c("categoty")],
                   1
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "top-left-block" },
+                  [
+                    _c(
+                      "v-chip",
+                      { attrs: { color: "primary", label: "", outline: "" } },
+                      [
+                        _vm._v(
+                          "Остаток на складе на " +
+                            _vm._s(_vm.balance) +
+                            " грн. "
+                        ),
+                        _c("i", { staticClass: "material-icons" }, [
+                          _vm._v("account_balance_wallet")
+                        ])
+                      ]
+                    )
+                  ],
+                  1
                 )
               ]),
               _vm._v(" "),
@@ -69101,8 +69143,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     created: function created() {
-        this.getBalance();
-        this.getCourse();
+        //            this.getBalance();
+        //            this.getCourse();
         this.getOperations();
         this.getHistory(1);
     },
@@ -69112,45 +69154,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        getBalance: function getBalance() {
-            var _this = this;
-
-            var vueObject = this;
-            var uri = '/balance';
-            Axios.get(uri).then(function (response) {
-                var data = response.data;
-                vueObject.balance = data.balance;
-                vueObject.salesAmount = data.salesAmount;
-                vueObject.marriageAmount = data.marriageAmount;
-            }).catch(function (e) {
-                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
-            });
-        },
         getCourse: function getCourse() {
-            var _this2 = this;
+            var _this = this;
 
             var vueObject = this;
             Axios.get('/course').then(function (response) {
                 vueObject.course = response.data;
             }).catch(function (e) {
-                _this2.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
+                _this.$store.dispatch('errorBlock', { text: "Ошибка", time: 1000 });
             });
         },
         getHistory: function getHistory(id) {
-            var _this3 = this;
+            var _this2 = this;
 
             var uri = '/history/' + id;
             Axios.get(uri).then(function (response) {
                 console.log(response);
-                _this3.tableItems = response.data;
+                _this2.tableItems = response.data;
             });
         },
         getOperations: function getOperations() {
-            var _this4 = this;
+            var _this3 = this;
 
             var uri = '/operations';
             Axios.get(uri).then(function (response) {
-                _this4.operations = response.data;
+                _this3.operations = response.data;
             });
         }
     }

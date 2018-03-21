@@ -97,8 +97,8 @@
             }
         },
         created: function(){
-            this.getBalance();
-            this.getCourse();
+//            this.getBalance();
+//            this.getCourse();
             this.getOperations();
             this.getHistory(1);
         },
@@ -108,16 +108,6 @@
             }
         },
         methods: {
-            getBalance: function () {
-                let vueObject = this;
-                let uri = '/balance';
-                Axios.get(uri).then((response) => {
-                    let data = response.data;
-                    vueObject.balance = data.balance;
-                    vueObject.salesAmount = data.salesAmount;
-                    vueObject.marriageAmount = data.marriageAmount;
-                }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
-            },
             getCourse: function () {
                 let vueObject = this;
                 Axios.get('/course').then((response) => {

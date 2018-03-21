@@ -9,6 +9,10 @@
                     <div class="top-left-block">
                         <categoty></categoty>
                     </div>
+                    <div class="top-left-block">
+                        <v-chip color="primary" label outline>Остаток на складе на {{ balance }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                    </div>
+
                 </div>
                 <v-spacer></v-spacer>
                 <div class="col-md-7">
@@ -73,11 +77,13 @@
                 noResultsText: 'Такого товара нет',
                 pagination: {rowsPerPage: 10, page: 1},
                 tableHeaders: [],
-                tableItems: []
+                tableItems: [],
+                balance:0
             }
         },
         created: function(){
             this.getProducts();
+            this.getBalance();
             this.getCategories()
         },
 
@@ -93,6 +99,16 @@
                 }).then(response => {
                     this.$store.dispatch('successBlock', {text:"Товар удалён", time:1000});
                     this.getProducts();
+                }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
+            },
+            getBalance: function () {
+                let vueObject = this;
+                let uri = '/balance';
+                Axios.get(uri).then((response) => {
+                    let data = response.data;
+                    vueObject.balance = data.balance;
+//                    vueObject.salesAmount = data.salesAmount;
+//                    vueObject.marriageAmount = data.marriageAmount;
                 }).catch(e => {  this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});})
             },
 
