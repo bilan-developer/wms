@@ -17,8 +17,7 @@ class Boss
     public function handle($request, Closure $next)
     {
         $user = Auth::user();
-        if(!$user){
-//            || $user->id_role != 3
+        if(!$user || $user->id_role !== 3){
             return redirect('home');
         }
 
