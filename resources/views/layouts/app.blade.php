@@ -39,11 +39,11 @@
             </nav>
                 @yield('content')
             @else
-                    @if (Auth::user()->id_role == 3))
+{{--                    @if (Auth::user()->id_role == 3))--}}
                         <layout></layout>
-                    @else
-                        @yield('content')
-                    @endif
+                    {{--@else--}}
+                        {{--@yield('content')--}}
+                    {{--@endif--}}
             @endguest
         </div>
 
