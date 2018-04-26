@@ -15,9 +15,9 @@ Route::get('/exmo', 'ExmoController@exmo');
 Route::get('/candles ', 'ExmoController@candles');
 Route::get('/exmo-show', 'ExmoController@index');
 
-Route::resource('/product','ProductController');
-Route::resource('/category','CategoryController');
-Route::resource('/history','HistoryController');
+Route::resource('/product','ProductController')->middleware('boss');
+Route::resource('/category','CategoryController')->middleware('boss');
+Route::resource('/history','HistoryController')->middleware('boss');
 Auth::routes();
 
 Route::get('/', function () {
@@ -27,23 +27,23 @@ Route::get('/logout', function () {
     Auth::logout();
 });
 
-Route::post('/write-off', 'ProductController@writeOff');
-Route::get('/write-off-list', 'ProductController@writeOffList');
-Route::get('/show-write-off/{id}', 'ProductController@showWriteOff');
-Route::get('/show-purchase/{id}', 'ProductController@showPurchase');
-Route::get('/purchase', 'ProductController@purchase');
+Route::post('/write-off', 'ProductController@writeOff')->middleware('boss');;
+Route::get('/write-off-list', 'ProductController@writeOffList')->middleware('boss');
+Route::get('/show-write-off/{id}', 'ProductController@showWriteOff')->middleware('boss');
+Route::get('/show-purchase/{id}', 'ProductController@showPurchase')->middleware('boss');
+Route::get('/purchase', 'ProductController@purchase')->middleware('boss');
 
 
-Route::get('/balance', 'ReportController@balance');
-Route::get('/operations', 'OperationController@index');
+Route::get('/balance', 'ReportController@balance')->middleware('boss');
+Route::get('/operations', 'OperationController@index')->middleware('boss');
 
-Route::get('/course', 'AdapterController@course');
+Route::get('/course', 'AdapterController@course')->middleware('boss');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/get-user', function () {
     return \Illuminate\Support\Facades\Auth::user();
-});
+})->middleware('boss');
 
 
 
