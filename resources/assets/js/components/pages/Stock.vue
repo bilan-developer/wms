@@ -10,7 +10,7 @@
                         <categoty></categoty>
                     </div>
                     <div class="top-left-block">
-                        <v-chip color="primary" label outline>Остаток на складе на {{ balance }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                        <v-chip color="primary" label outline>Остаток на складе на {{ toFixed(balance, 2) }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
                     </div>
 
                 </div>

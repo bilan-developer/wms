@@ -68783,7 +68783,7 @@ var render = function() {
                       [
                         _vm._v(
                           "Остаток на складе на " +
-                            _vm._s(_vm.balance) +
+                            _vm._s(_vm.toFixed(_vm.balance, 2)) +
                             " грн. "
                         ),
                         _c("i", { staticClass: "material-icons" }, [
@@ -69803,7 +69803,11 @@ var render = function() {
                     "v-chip",
                     { attrs: { color: "primary", label: "", outline: "" } },
                     [
-                      _vm._v("Продаж на " + _vm._s(_vm.salesAmount) + " грн. "),
+                      _vm._v(
+                        "Продаж на " +
+                          _vm._s(_vm.toFixed(_vm.salesAmount, 2)) +
+                          " грн. "
+                      ),
                       _c("i", { staticClass: "material-icons" }, [
                         _vm._v("account_balance_wallet")
                       ])
@@ -70133,7 +70137,9 @@ var render = function() {
                     { attrs: { color: "primary", label: "", outline: "" } },
                     [
                       _vm._v(
-                        "Списаний на " + _vm._s(_vm.salesAmount) + " грн. "
+                        "Списаний на " +
+                          _vm._s(_vm.toFixed(_vm.salesAmount, 2)) +
+                          " грн. "
                       ),
                       _c("i", { staticClass: "material-icons" }, [
                         _vm._v("account_balance_wallet")
