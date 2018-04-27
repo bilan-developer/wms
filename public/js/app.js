@@ -68783,7 +68783,7 @@ var render = function() {
                       [
                         _vm._v(
                           "Остаток на складе на " +
-                            _vm._s(_vm.toFixed(_vm.balance, 2)) +
+                            _vm._s(_vm.balance.toFixed(2)) +
                             " грн. "
                         ),
                         _c("i", { staticClass: "material-icons" }, [
@@ -69805,7 +69805,7 @@ var render = function() {
                     [
                       _vm._v(
                         "Продаж на " +
-                          _vm._s(_vm.toFixed(_vm.salesAmount, 2)) +
+                          _vm._s(_vm.salesAmount.toFixed(2)) +
                           " грн. "
                       ),
                       _c("i", { staticClass: "material-icons" }, [
@@ -70138,7 +70138,7 @@ var render = function() {
                     [
                       _vm._v(
                         "Списаний на " +
-                          _vm._s(_vm.toFixed(_vm.salesAmount, 2)) +
+                          _vm._s(_vm.salesAmount.toFixed(2)) +
                           " грн. "
                       ),
                       _c("i", { staticClass: "material-icons" }, [

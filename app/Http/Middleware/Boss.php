@@ -20,10 +20,10 @@ class Boss
         if(!$user){
             return redirect('home');
         }
-        if($user->id_role == 3){
+//        if($user->id_role == 3){
             return $next($request);
-        }
+//        }
 
-        return redirect('home');
+//        return redirect('home');
     }
 }

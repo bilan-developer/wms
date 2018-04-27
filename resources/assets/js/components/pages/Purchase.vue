@@ -3,7 +3,7 @@
         <div class="col-md-12">
             <v-card-title>
                 <div>
-                    <v-chip color="primary" label outline>Продаж на {{ toFixed(salesAmount, 2) }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
+                    <v-chip color="primary" label outline>Продаж на {{ salesAmount.toFixed(2) }} грн. <i class="material-icons">account_balance_wallet</i></v-chip>
                 </div>
                 <v-spacer></v-spacer>
                 <div class="col-md-7">
