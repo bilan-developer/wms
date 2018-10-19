@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -56,92 +56,92 @@
         }
 
     </style>
-    </head>
-    <body>
-    <div id="app">
-        <services
+</head>
+<body>
+<div id="app">
+    <services
             default-service="<?php echo $defaultTab; ?>"
             default-output="Output here ..."
-        />
-    </div>
+    />
+</div>
 
-    <script type="text/x-template" id="services">
-        <div class="services container mt-30">
-            <div class="row">
-                <div class="col-sm-10 col-sm-offset-1">
+<script type="text/x-template" id="services">
+    <div class="services container mt-30">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1">
 
-                    <services-tabs/>
-                    <service/>
-                    <service-output v-show="! isPending"/>
-                    <loader v-show="isPending"/>
-                    <component :is="currentCommand.id" v-if="hasDialog"/>
+                <services-tabs/>
+                <service/>
+                <service-output v-show="! isPending"/>
+                <loader v-show="isPending"/>
+                <component :is="currentCommand.id" v-if="hasDialog"/>
 
-                </div>
             </div>
         </div>
-    </script>
+    </div>
+</script>
 
-    <script type="text/x-template" id="services-tabs">
-        <div class="panel panel-default">
-            <h3 class="panel-heading">
-                Сервисная панель
-            </h3>
-            <ul class="nav nav-tabs nav-justified">
+<script type="text/x-template" id="services-tabs">
+    <div class="panel panel-default">
+        <h3 class="panel-heading">
+            Сервисная панель <span style="color:lightgreen">DEV(тест сервер)</span>
+        </h3>
+        <ul class="nav nav-tabs nav-justified">
 
-                <li v-for="service in services" :class="{ active: service.id === serviceId }">
-                    <a href="javascript:;" @click.prevent="! isPending && setService(service)">
-                        {{ service.name }}
-                    </a>
-                </li>
+            <li v-for="service in services" :class="{ active: service.id === serviceId }">
+                <a href="javascript:;" @click.prevent="! isPending && setService(service)">
+                    {{ service.name }}
+                </a>
+            </li>
 
-            </ul>
-        </div>
-    </script>
+        </ul>
+    </div>
+</script>
 
-    <script type="text/x-template" id="service">
-        <div class="tab-content mt-30">
-            <div class="tab-pane fade in active">
-                <div class="d-flex cards" v-for="row in rows">
+<script type="text/x-template" id="service">
+    <div class="tab-content mt-30">
+        <div class="tab-pane fade in active">
+            <div class="d-flex cards" v-for="row in rows">
 
-                    <service-command
+                <service-command
                         v-for="(command, key) in comandsByRow(row)"
                         :key="command.id"
                         :command="command"
-                    />
+                />
 
-                </div>
             </div>
         </div>
-    </script>
+    </div>
+</script>
 
-    <script type="text/x-template" id="service-command">
-        <div class="panel panel-default justify-card-content" :class="command.col">
-            <div class="panel-body text-center">
-                <h5>{{command.name}}</h5>
-                <button class="btn btn-primary"
-                        @click="onCommandClick"
-                        :title="command.description"
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                >
-                    {{command.name}}
-                </button>
-            </div>
+<script type="text/x-template" id="service-command">
+    <div class="panel panel-default justify-card-content" :class="command.col">
+        <div class="panel-body text-center">
+            <h5>{{command.name}}</h5>
+            <button class="btn btn-primary"
+                    @click="onCommandClick"
+                    :title="command.description"
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+            >
+                {{command.name}}
+            </button>
         </div>
-    </script>
+    </div>
+</script>
 
-    <script type="text/x-template" id="service-output">
-        <pre
+<script type="text/x-template" id="service-output">
+    <pre
             class="panel panel-default max-height-300"
             :class=" {'panel-danger': hasError} "
-        >{{output}}</pre>
-    </script>
+    >{{output}}</pre>
+</script>
 
-    <script type="text/x-template" id="loader">
-        <div class="text-center">
-            <i class="fa fa-refresh fa-spin fa-2x"></i>
-        </div>
-    </script>
+<script type="text/x-template" id="loader">
+    <div class="text-center">
+        <i class="fa fa-refresh fa-spin fa-2x"></i>
+    </div>
+</script>
 
 <!--     <script type="text/x-template" id="command-dialog">
         <div :id="currentCommand.dialogId" class="modal fade" tabindex="-1" role="dialog">
@@ -202,13 +202,13 @@
         </command-dialog>
     </script> -->
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/vue@2.4.1/dist/vue.min.js"></script>
-    <script src="https://unpkg.com/vuex@2.3.1/dist/vuex.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/vue@2.4.1/dist/vue.min.js"></script>
+<script src="https://unpkg.com/vuex@2.3.1/dist/vuex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.min.js"></script>
 
-    <script>
+<script>
     'use strict'
 
     const services = <?php echo $services;?>
@@ -349,7 +349,7 @@
                             output: response.data.output,
                             hasError: ! response.data.successful
                         })
-                })
+                    })
 
                 context.commit('setCommand', null)
             }
@@ -574,6 +574,6 @@
 
     $('[data-toggle="tooltip"]').tooltip()
 
-    </script>
-    </body>
+</script>
+</body>
 </html>

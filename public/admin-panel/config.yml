@@ -1,37 +1,20 @@
-workingDirectory: /var/www/html/
+workingDirectory: /home/wmskaru/public.wmska.ru
 
 vcs:
 
     svn:
-        username: akolev
-        password: akolevremua
-        url: svn://46.101.138.111/rem
-
-    git:
         username: username
         password: password
-        url: your-git-repository
+        url: your-svn-repository
 
-defaultTab: svn
+    git:
+        username: bilansasha1996
+        password: Sasha03081996
+        url: https://github.com/bilansasha1996/wms.git
+
+defaultTab: git
 
 tabs:
-    svn:
-        grid:
-            rows:
-                -
-                    - "col-md-3"
-                    - "col-md-3"
-                    - "col-md-3"
-                    - "col-md-3"
-
-        commands:
-                        update: svn up --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
-                        log: svn log --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
-                        info: svn info --non-interactive
-                        cleanup:
-                            command: svn cleanup --non-interactive
-                            description: Если что-то пошло не так, эта команда должна решить все проблемы
-
     git:
         grid:
             rows:
@@ -41,10 +24,27 @@ tabs:
                     - "col-md-3"
                     - "col-md-3"
         commands:
-            pull: git pull origin master
+            pull: git pull origin dev
             status: git status
             diff: git diff
             log: git log
+
+    svn:
+            grid:
+                rows:
+                    -
+                        - "col-md-3"
+                        - "col-md-3"
+                        - "col-md-3"
+                        - "col-md-3"
+
+            commands:
+                update: svn up --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
+                log: svn log --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
+                info: svn info --non-interactive
+                cleanup:
+                    command: svn cleanup --non-interactive
+                    description: Если что-то пошло не так, эта команда должна решить все проблемы
 
     composer:
         grid:
@@ -55,29 +55,59 @@ tabs:
                     - "col-md-4"
 
         commands:
-            update: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar update
-            dump-autoload: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar dump-autoload
-            info: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar info
+            update: export COMPOSER_HOME=$(pwd)/.composer && /var/www/1t/data/www/1tdev.client02.prostoy.ru/composer.phar update
+            dump-autoload: export COMPOSER_HOME=$(pwd)/.composer && /var/www/1t/data/www/1tdev.client02.prostoy.ru/composer.phar dump-autoload
+            info: export COMPOSER_HOME=$(pwd)/.composer && /var/www/1t/data/www/1tdev.client02.prostoy.ru/composer.phar info
 
     node:
         grid:
             rows:
                 -
-                    - "col-md-4"
-                    - "col-md-4"
-                    - "col-md-4"
+                    - "col-md-12"
                 -
-                    - "col-md-4"
-                    - "col-md-4"
-                    - "col-md-4"
-
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-6"
+                    - "col-md-6"
         commands:
             npm install: npm install
-            npm run dev: npm run dev --scripts-prepend-node-path
-            npm run prod: npm run prod
-            yarn install: yarn install
-            yarn run dev: yarn run dev
-            yarn run prod: yarn run prod
+
+            yarn build: yarn run build
+            yarn build-production: yarn run build-production
+
+            yarn build-user: yarn run build-user
+            yarn build-user-production: yarn run build-user-production
+
+            yarn build-controller: yarn run build-controller
+            yarn build-controller-production: yarn run build-controller-production
+
+            yarn build-operator: yarn run build-operator
+            yarn build-operator-production: yarn run build-operator-production
+
+            yarn build-manager: yarn run build-manager
+            yarn build-manager-production: yarn run build-manager-production
+
+            yarn build-moderator: yarn run build-moderator
+            yarn build-moderator-production: yarn run build-moderator-production
+
+            yarn build-admin: yarn run build-admin
+            yarn build-admin-production: yarn run build-admin-production
 
     artisan:
         grid:
@@ -99,9 +129,13 @@ tabs:
                     - "col-md-4"
                     - "col-md-4"
                 -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
                     - "col-md-4"
                     - "col-md-4"
                     - "col-md-4"
+
         commands:
             up: php artisan up
             down: php artisan down
@@ -111,7 +145,7 @@ tabs:
             routes: php artisan route:list
 
             migrate: php artisan migrate
-            migrate fresh: php artisan migrate:fresh
+            site1t-migrate: php artisan site1t:migrate
             status: php artisan migrate:status
             seed: php artisan db:seed
 
@@ -119,9 +153,12 @@ tabs:
             clear config: php artisan config:clear
             storage link: php artisan storage:link
 
-            restart queue: php artisan queue:restart
+            restart all workers: php artisan queue:restart
             run worker: php artisan queue:work --tries 1
-            generate permissions: php artisan permissions:generate
+
+            failed jobs: php artisan queue:failed
+            retry all failed jobs: php artisan queue:retry all
+            delete all failed jobs: php artisan queue:flush
 
     tests:
         grid:
@@ -138,4 +175,4 @@ tabs:
                 -
                     - "col-md-12"
         commands:
-            history: cat ${workingDirectory}/logs/commands.log
+            history: cat ${workingDirectory}/public/admin-panel/logs/commands.log

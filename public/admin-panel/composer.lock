@@ -50,16 +50,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v2.8.38",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "dbb5b6fcd6466827fbca6df516fe11d16ca821bd"
+                "reference": "fedc2f9f618e865c00716201491f52d135d1e854"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/dbb5b6fcd6466827fbca6df516fe11d16ca821bd",
-                "reference": "dbb5b6fcd6466827fbca6df516fe11d16ca821bd",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/fedc2f9f618e865c00716201491f52d135d1e854",
+                "reference": "fedc2f9f618e865c00716201491f52d135d1e854",
                 "shasum": ""
             },
             "require": {
@@ -101,7 +101,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:20:27+00:00"
+            "time": "2018-02-19T16:23:47+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -278,16 +278,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.38",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "ee2c91470ff262b1a00aec27875d38594aa87629"
+                "reference": "756f614c5061729ea245ac6717231f7e3bfb74f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/ee2c91470ff262b1a00aec27875d38594aa87629",
-                "reference": "ee2c91470ff262b1a00aec27875d38594aa87629",
+                "url": "https://api.github.com/repos/symfony/process/zipball/756f614c5061729ea245ac6717231f7e3bfb74f9",
+                "reference": "756f614c5061729ea245ac6717231f7e3bfb74f9",
                 "shasum": ""
             },
             "require": {
@@ -323,20 +323,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-04-03T05:20:27+00:00"
+            "time": "2018-02-12T17:44:58+00:00"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v2.8.38",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "942a8142104deb3254f7da292a923b6d4eac8081"
+                "reference": "e6a3e8c832096f8902a3e80169fca5d202e7e0d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/942a8142104deb3254f7da292a923b6d4eac8081",
-                "reference": "942a8142104deb3254f7da292a923b6d4eac8081",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/e6a3e8c832096f8902a3e80169fca5d202e7e0d3",
+                "reference": "e6a3e8c832096f8902a3e80169fca5d202e7e0d3",
                 "shasum": ""
             },
             "require": {
@@ -391,11 +391,11 @@
                 "debug",
                 "dump"
             ],
-            "time": "2018-04-03T05:20:27+00:00"
+            "time": "2018-01-31T10:36:06+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.38",
+            "version": "v2.8.36",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",

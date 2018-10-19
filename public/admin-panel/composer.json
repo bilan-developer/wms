@@ -1,12 +1,12 @@
 {
-    "name": "",
+    "name": "dmitrybubyakin/admin-panel",
     "description": "Admin panel",
     "type": "project",
     "license": "MIT",
     "authors": [
         {
-            "name": "hagrida",
-            "email": "hagrida@yandex.ru"
+            "name": "test",
+            "email": "test@yandex.ru"
         }
     ],
     "require": {

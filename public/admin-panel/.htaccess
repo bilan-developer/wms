@@ -10,5 +10,5 @@ Deny from all
 
 AuthType Basic
 AuthName "Admin panel"
-AuthUserFile /var/www/html/public/rem-a-panel/.htpasswd
+AuthUserFile /home/wmskaru/public.wmska.ru/public/admin-panel/.htpasswd
 Require valid-user

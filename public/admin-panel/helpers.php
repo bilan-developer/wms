@@ -91,9 +91,6 @@ function prepare_command($command)
 function process($command)
 {
     $command = prepare_command($command);
-    if (strpos($command,'yarn') !== false) {
-        execYarnCommand($command);
-    }
     $workingDirectory = config('workingDirectory');
 
     log_command($command);
@@ -108,13 +105,6 @@ function process($command)
 
     return array($successful, $output);
 }
-  function execYarnCommand($command){
-    dump(1);
-      $data=shell_exec("sudo HOME='".$_SERVER['DOCUMENT_ROOT']."' yarn run dev");
-
-      return array('', $data);
-  }
-
 
 function log_command($command)
 {
