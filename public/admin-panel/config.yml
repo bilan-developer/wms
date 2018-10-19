@@ -1,0 +1,141 @@
+workingDirectory: /var/www/html/
+
+vcs:
+
+    svn:
+        username: akolev
+        password: akolevremua
+        url: svn://46.101.138.111/rem
+
+    git:
+        username: username
+        password: password
+        url: your-git-repository
+
+defaultTab: svn
+
+tabs:
+    svn:
+        grid:
+            rows:
+                -
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+
+        commands:
+                        update: svn up --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
+                        log: svn log --non-interactive --username=${vcs.svn.username} --password=${vcs.svn.password}
+                        info: svn info --non-interactive
+                        cleanup:
+                            command: svn cleanup --non-interactive
+                            description: Если что-то пошло не так, эта команда должна решить все проблемы
+
+    git:
+        grid:
+            rows:
+                -
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+        commands:
+            pull: git pull origin master
+            status: git status
+            diff: git diff
+            log: git log
+
+    composer:
+        grid:
+            rows:
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+
+        commands:
+            update: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar update
+            dump-autoload: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar dump-autoload
+            info: export COMPOSER_HOME=$(pwd)/.composer && /var/www/html/composer.phar info
+
+    node:
+        grid:
+            rows:
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+
+        commands:
+            npm install: npm install
+            npm run dev: npm run dev --scripts-prepend-node-path
+            npm run prod: npm run prod
+            yarn install: yarn install
+            yarn run dev: yarn run dev
+            yarn run prod: yarn run prod
+
+    artisan:
+        grid:
+            rows:
+                -
+                    - "col-md-6"
+                    - "col-md-6"
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+                -
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+                    - "col-md-3"
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+                -
+                    - "col-md-4"
+                    - "col-md-4"
+                    - "col-md-4"
+        commands:
+            up: php artisan up
+            down: php artisan down
+
+            key: php artisan key:generate
+            env: cat .env
+            routes: php artisan route:list
+
+            migrate: php artisan migrate
+            migrate fresh: php artisan migrate:fresh
+            status: php artisan migrate:status
+            seed: php artisan db:seed
+
+            clear cache: php artisan cache:clear
+            clear config: php artisan config:clear
+            storage link: php artisan storage:link
+
+            restart queue: php artisan queue:restart
+            run worker: php artisan queue:work --tries 1
+            generate permissions: php artisan permissions:generate
+
+    tests:
+        grid:
+            rows:
+                -
+                    - "col-md-12"
+        commands:
+            phpunit: vendor/bin/phpunit
+
+
+    history:
+        grid:
+            rows:
+                -
+                    - "col-md-12"
+        commands:
+            history: cat ${workingDirectory}/logs/commands.log

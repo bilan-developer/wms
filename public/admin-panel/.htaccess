@@ -1,0 +1,14 @@
+DirectoryIndex index.php
+
+Order deny,allow
+Deny from all
+
+<Files ~ "(admin.php|command.php)">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+AuthType Basic
+AuthName "Admin panel"
+AuthUserFile /var/www/html/public/rem-a-panel/.htpasswd
+Require valid-user
