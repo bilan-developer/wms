@@ -8,7 +8,3 @@ Deny from all
     Allow from all
 </Files>
 
-AuthType Basic
-AuthName "Admin panel"
-AuthUserFile /home/wmskaru/public.wmska.ru/public/admin-panel/.htpasswd
-Require valid-user
