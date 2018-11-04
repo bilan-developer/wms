@@ -80,4 +80,10 @@ class Product extends Model
         return $amount;
     }
 
+    public function add($number)
+    {
+        $this->total = round($this->total + $number, 2);
+        $this->save();
+    }
+
 }

@@ -32,7 +32,7 @@
                 <td class="text-xs-left">{{ props.item.comment }}</td>
                 <td class="col-md-2 text-xs-center">{{ props.item.amount }}</td>
                 <td class="col-md-1 text-xs-right">
-                    <show-purchase :id="props.item.id" :url=url></show-purchase>
+                    <show-purchase :id="props.item.id" :type=type :is_return="props.item.is_return" @updateTable="getInfoTable"></show-purchase>
                 </td>
             </template>
         </v-data-table>
@@ -57,25 +57,25 @@
                 pagination: {rowsPerPage: 10, page: 1},
                 tableHeaders: [],
                 tableItems: [],
-                url: "/show-purchase/"
+                type: "purchase"
             }
         },
         created: function(){
-            let uri = '/purchase';
-            Axios.get(uri).then((response) => {
-                this.tableHeaders = response.data.headers;
-                this.tableItems   = response.data.items;
-                this.salesAmount  = response.data.salesAmount;
-            });
+            this.getInfoTable();
         },
-
         computed: {
             pages () {
                 return (this.pagination.rowsPerPage) ? Math.ceil(this.tableItems.length / this.pagination.rowsPerPage) : 0
             }
         },
         methods: {
-
+            getInfoTable: function () {
+                Axios.get('/purchase').then((response) => {
+                    this.tableHeaders = response.data.headers;
+                    this.tableItems   = response.data.items;
+                    this.salesAmount  = response.data.salesAmount;
+                });
+            }
         }
     }
 </script>

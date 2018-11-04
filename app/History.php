@@ -11,7 +11,10 @@ class History extends Model
     const bay = 2;
     const writeOff = 3;
     const delete = 4;
+    const return = 5;
+
     protected $table = 'histories';
+
     protected $fillable = [
         'id',
         'number',
@@ -153,6 +156,29 @@ class History extends Model
         $history->price = $product->price;
         $history->amount = round($number * $product->total, 2) ;
         $history->operation_id = self::delete;
+
+        $history->save();
+    }
+
+    /**
+     * История возврата товара.
+     *
+     * @param $productId
+     * @param $number
+     * @param $price
+     * @param $amount
+     *
+     * @return bool|null|void
+     */
+    public static function returnProduct($productId, $number, $price, $amount)
+    {
+        $history = new History();
+
+        $history->id_product = $productId;
+        $history->number = $number;
+        $history->price = $price;
+        $history->amount = $amount ;
+        $history->operation_id = self::return;
 
         $history->save();
     }

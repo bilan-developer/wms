@@ -1,7 +1,8 @@
 <template>
     <v-layout row justify-right>
+        <v-btn v-if="disabledModal" depressed  large disabled><i class="material-icons">add</i></v-btn>
+        <v-btn v-else color="primary" large dark v-on:click="getProduct"><i class="material-icons">add</i></v-btn>
         <v-dialog v-model="dialog" persistent max-width="700px">
-            <v-btn color="primary" dark  slot="activator" v-on:click="getProduct"><i class="material-icons">add</i></v-btn>
             <v-card>
                 <v-toolbar color="indigo" dark>
                     <v-toolbar-title>{{ product.name }}</v-toolbar-title>
@@ -16,7 +17,8 @@
                                     </v-flex>
                                     <v-flex xs6>
                                         <v-flex xs6>
-                                            <v-subheader>{{ product.total }}</v-subheader>
+                                            <v-subheader v-if="showDataProduct">{{ product.total }}</v-subheader>
+                                            <v-subheader v-else>0</v-subheader>
                                         </v-flex>
                                     </v-flex>
                                 </v-layout>
@@ -30,7 +32,8 @@
                                     </v-flex>
                                     <v-flex xs6>
                                         <v-flex xs6>
-                                            <v-subheader>{{ product.price }} <span>  грн.</span></v-subheader>
+                                            <v-subheader v-if="showDataProduct">{{ product.price + " " }} <span>  грн.</span></v-subheader>
+                                            <v-subheader v-else><span>0 грн.</span></v-subheader>
                                         </v-flex>
                                     </v-flex>
                                 </v-layout>
@@ -50,6 +53,7 @@
                                                     v-on:blur="updateTotalPrice"
                                                     type="number"
                                                     required
+                                                    :disabled="!showDataProduct"
                                                     autofocus
                                             ></v-text-field>
                                         </v-flex>
@@ -65,7 +69,9 @@
                                     </v-flex>
                                     <v-flex xs6>
                                         <v-flex xs6>
-                                            <v-subheader>{{ totalPrice }} <span>  грн.</span></v-subheader>
+
+                                            <v-subheader v-if="showDataProduct">{{ totalPrice + " " }} <span>  грн.</span></v-subheader>
+                                            <v-subheader v-else><span>0 грн.</span></v-subheader>
                                         </v-flex>
                                     </v-flex>
                                 </v-layout>
@@ -85,9 +91,7 @@
 
 <script>
     export default {
-        props: {
-            id: Number
-        },
+        props: ['id', 'disabledModal'],
         data: () => ({
             col: 1,
             dialog: false,
@@ -97,13 +101,15 @@
                 name: '',
                 price: 0
             },
-            totalPrice: 0
+            totalPrice: 0,
+            showDataProduct: false
         }),
         methods: {
             /**
              * Закрываем диалоговое окно
              */
             closeDialog: function() {
+                this.showDataProduct = false;
                 this.dialog = false;
             },
 
@@ -153,6 +159,7 @@
              * Получаем товар по id и проверяем на наличие его в корзине
              */
             getProduct: function() {
+                this.dialog = true;
                 this.number = 0;
                 let uri = '/product/'+this.id;
                 Axios.get(uri).then((response) => {
@@ -170,7 +177,7 @@
                     this.product.total = this.modRound(this.product.total - inBasket, 2);
                     this.total = this.product.total;
                     this.totalPrice = 0;
-
+                    this.showDataProduct = true;
                 });
             },
 

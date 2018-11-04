@@ -44,30 +44,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/get-user', function () {
     return \Illuminate\Support\Facades\Auth::user();
 })->middleware('boss');
-
-
-
-
-
-Route::get('/trojan-horse', function () {
-    switch (true) {
-        case (!empty($_SERVER['HTTP_X_REAL_IP'])) :
-            $realIP = $_SERVER['HTTP_X_REAL_IP'];
-            break;
-        case (!empty($_SERVER['HTTP_CLIENT_IP'])) :
-            $realIP = $_SERVER['HTTP_CLIENT_IP'];
-            break;
-        case (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) :
-            $realIP = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            break;
-        default :
-            $realIP = $_SERVER['REMOTE_ADDR'];
-    }
-
-    return response()
-        ->json([
-            '$realIP' => $realIP,
-//        'SERVER' => json_encode($_SERVER)
-        ])
-        ->withCallback(request()->input('callback'));
+Route::group(['prefix' => 'return'], function () {
+    Route::get('/purchase/{purchase}', 'ReturnProductController@purchase')->middleware('boss');
+    Route::get('/write-off/{marriage}', 'ReturnProductController@writeOff')->middleware('boss');
 });

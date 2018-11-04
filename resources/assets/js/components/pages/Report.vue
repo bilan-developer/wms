@@ -85,13 +85,13 @@
                 ],
                 search: '',
                 noResultsText: 'Такого товара нет',
-                pagination: {rowsPerPage: 10, page: 1, sortBy: 'date'},
+                pagination: {rowsPerPage: 10, page: 1, sortBy: 'created_at'},
                 tableHeaders: [
                     {text: 'Товар', align: 'center', sortable: true, value: 'name' },
                     {text: 'Количество', align: 'center', sortable: true, value: 'number' },
                     {text: 'Цена', align: 'center', sortable: true, value: 'price' },
                     {text: 'Сумма', align: 'center', sortable: true, value: 'amount' },
-                    {text: 'Дата', align: 'center', sortable: true, value: 'date' },
+                    {text: 'Дата', align: 'center',  value: 'created_at' },
                 ],
                 tableItems: []
             }
@@ -118,7 +118,7 @@
                 let uri = '/history/' + id;
                 Axios.get(uri).then((response) => {
                     console.log(response);
-                    this.tableItems   = response.data;
+                    this.tableItems = response.data;
                 });
             },
             getOperations:function () {

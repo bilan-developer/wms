@@ -202,7 +202,14 @@ class ProductController extends Controller
         ];
 
         $purchase = Purchase::orderBy('id','DESC')->get()->toArray();
-        $salesAmount = array_sum(array_column($purchase, 'amount'));
+        $salesAmount = 0;
+
+        foreach ($purchase as $item){
+            if(!$item['is_return']){
+                $salesAmount += $item['amount'];
+            }
+        }
+
         $result = ['headers' => $headers, 'items' => $purchase, 'salesAmount' => $salesAmount];
 
         return json_encode($result);
@@ -223,7 +230,12 @@ class ProductController extends Controller
         ];
 
         $purchase = Marriage::orderBy('id','DESC')->get()->toArray();
-        $salesAmount = array_sum(array_column($purchase, 'amount'));
+        $salesAmount = 0;
+        foreach ($purchase as $item){
+            if(!$item['is_return']){
+                $salesAmount += $item['amount'];
+            }
+        }
         $result = ['headers' => $headers, 'items' => $purchase, 'salesAmount' => $salesAmount];
 
         return json_encode($result);

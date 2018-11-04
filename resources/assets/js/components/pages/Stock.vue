@@ -27,11 +27,11 @@
             </v-card-title>
         </div>
         <v-data-table
-                :headers="tableHeaders"
-                :items="tableItems"
+                v-bind:headers="tableHeaders"
+                v-bind:items="tableItems"
+                v-bind:pagination.sync="pagination"
+                v-bind:no-results-text="noResultsText"
                 :search="search"
-                :pagination.sync="pagination"
-                :no-results-text="noResultsText"
                 hide-actions
                 class="elevation-1"
         >

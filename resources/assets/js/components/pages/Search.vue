@@ -36,7 +36,7 @@
                 <td class="text-xs-center">{{ props.item.all }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="text-xs-right col-md-1 col-md-offset-1">
-                    <add-product-basket :id="props.item.id"></add-product-basket>
+                    <add-product-basket :id="props.item.id" :disabledModal="props.item.total <= 0"></add-product-basket>
                 </td>
             </template>
         </v-data-table>
@@ -63,7 +63,7 @@
                 noResultsText: 'Такого товара нет',
                 pagination: {rowsPerPage: 10, page: 1},
                 tableHeaders: [],
-                tableItems: []
+                tableItems: [],
             }
         },
         created: function(){

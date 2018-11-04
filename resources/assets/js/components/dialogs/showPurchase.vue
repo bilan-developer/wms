@@ -26,6 +26,8 @@
                 <div class="amount"><span>Всего: {{ amount }} </span></div>
                 <v-card-actions>
                     <v-spacer></v-spacer>
+                    <v-btn v-if="is_return" depressed disabled  flat >Товар возвращён</v-btn>
+                    <v-btn v-else color="error" flat @click="returnProduct">Возврат</v-btn>
                     <v-btn color="blue darken-1" flat @click="dialog=false">Закрыть</v-btn>
                 </v-card-actions>
             </v-card>
@@ -36,13 +38,7 @@
 <script>
 
     export default {
-        props: {
-            id: Number,
-            url: {
-                type: String,
-                default: '/show-purchase/'
-            }
-        },
+        props:['id', 'type', 'is_return'],
         data: () => ({
             amount: 0,
             dialog: false,
@@ -62,8 +58,7 @@
              * Получаем список товаров с покупки
              */
             show: function() {
-                let uri = this.url + this.id;
-                Axios.get(uri).then((response) => {
+                Axios.get('/show-' + this.type + '/' + this.id).then((response) => {
                     this.tableHeaders = response.data.headers;
                     this.tableItems   = response.data.items;
                     this.amount  = response.data.salesAmount;
@@ -71,6 +66,23 @@
                 });
             },
 
+            /**
+             * Возврат.
+             */
+            returnProduct: _.debounce(function () {
+                axios.get('return/' + this.type + '/' + this.id).then((response) => {
+                    console.log(response);
+                    if(response.data.status === 'ok'){
+                        this.$store.dispatch('successBlock', {text:"Товар возвращён на слад", time:1000});
+                    }else{
+                        this.$store.dispatch('errorBlock', {text:response.data.message, time:1000});
+                    }
+                    this.$emit('updateTable');
+                    this.dialog = false;
+                }).catch(e => {
+                    this.$store.dispatch('errorBlock', {text:"Ошибка", time:1000});
+                });
+            }, 600),
         }
     }
 </script>

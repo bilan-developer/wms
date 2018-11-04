@@ -46,7 +46,7 @@ class HistoryController extends Controller
      */
     public function show($id)
     {
-        return History::with('product')->where('operation_id', '=', $id)->get();
+        return History::with('product')->where('operation_id', '=', $id)->orderBy('created_at', 'desc')->get();
     }
 
     /**
