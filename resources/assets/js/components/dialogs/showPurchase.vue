@@ -26,7 +26,7 @@
                 <div class="amount"><span>Всего: {{ amount }} </span></div>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn v-if="is_return" depressed disabled  flat >Товар возвращён</v-btn>
+                    <v-btn v-if="is_return == '1'" depressed disabled  flat >Товар возвращён</v-btn>
                     <v-btn v-else color="error" flat @click="returnProduct">Возврат</v-btn>
                     <v-btn color="blue darken-1" flat @click="dialog=false">Закрыть</v-btn>
                 </v-card-actions>
